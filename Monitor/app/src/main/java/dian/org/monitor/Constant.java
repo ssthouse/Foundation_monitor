@@ -19,8 +19,5 @@ public class Constant {
     public static final String INTENT_KEY_DATA_TOUR_ITEM = "intent_data_key_tour_item";
 
 
-    //文件的路径
-    public static final String PICTURE_PATH = "/data/data/dian.org.monitor/picture/";
 
-    public static final String DATABASE_PATH = "/data/data/dian.org.monitor/database/";
 }

@@ -16,6 +16,7 @@ import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
 import java.util.Calendar;
 
+import dian.org.monitor.style.TransparentStyle;
 import dian.org.monitor.touritem.SupportStructAty;
 import dian.org.monitor.touritem.TourItem;
 import dian.org.monitor.touritem.WeatherStateAty;
@@ -66,7 +67,8 @@ public class TourEditAty extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tour_edit_aty);
-
+        //透明顶栏
+        TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
         initView();
     }
 
@@ -235,6 +237,7 @@ public class TourEditAty extends Activity {
                 .setButton1Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        dialogBuilder.dismiss();
                         finish();
                     }
                 })

@@ -10,6 +10,7 @@ import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
 import dian.org.monitor.R;
+import dian.org.monitor.style.TransparentStyle;
 
 /**
  * 编辑weatherState的Activity
@@ -22,6 +23,9 @@ public class WeatherStateAty extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_state_aty);
 
+
+        //透明顶栏
+        TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
         initView();
     }
 

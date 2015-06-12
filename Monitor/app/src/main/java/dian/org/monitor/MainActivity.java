@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import dian.org.monitor.style.TransparentStyle;
+
 /**
  * 展示项目列表的主界面
  * Created by ssthouse on 2015/6/8.
@@ -35,6 +37,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_aty);
+        //透明顶栏
+        TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
 
         initView();
     }

@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import dian.org.monitor.style.TransparentStyle;
+
 /**
  * Created by ssthouse on 2015/6/10.
  * 展示巡查列表的activity
@@ -47,7 +49,8 @@ public class TourListAty extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tour_list_aty);
-
+        //透明顶栏
+        TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
         initView();
     }
 

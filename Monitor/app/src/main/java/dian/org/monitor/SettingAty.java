@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import dian.org.monitor.style.TransparentStyle;
 import dian.org.monitor.util.PreferenceManager;
 
 /**
@@ -29,7 +30,8 @@ public class SettingAty extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_aty);
-
+        //透明顶栏
+        TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
         initView();
     }
 
