@@ -1,0 +1,101 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!--中间的内容区-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!--左边的文字区-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/login_aty_ll_height"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="@dimen/login_aty_ll_margin"
+                android:gravity="center"
+                android:text="用户名:"
+                android:textSize="@dimen/login_aty_normal_font" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/login_aty_ll_height"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="@dimen/login_aty_ll_margin"
+                android:gravity="center"
+                android:text="密码:  "
+                android:textSize="@dimen/login_aty_normal_font" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/login_aty_ll_height"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginRight="@dimen/login_aty_ll_margin"
+                android:gravity="center"
+                android:text="服务器:"
+                android:textSize="@dimen/login_aty_normal_font" />
+        </LinearLayout>
+
+        <!--右边的输入区-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight="5"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/id_et_user_name"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/login_aty_normal_font" />
+
+            <EditText
+                android:id="@+id/id_et_pass_word"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="textPassword"
+                android:textSize="@dimen/login_aty_normal_font" />
+
+            <Spinner
+                android:id="@+id/id_sp_server"
+                android:layout_width="200dp"
+                android:layout_height="@dimen/login_aty_ll_height"
+                android:gravity="center"
+                android:textSize="@dimen/login_aty_normal_font" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <Button
+        android:background="@drawable/button_click_selector"
+        android:id="@+id/id_btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="登陆" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2" />
+</LinearLayout>

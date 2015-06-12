@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="spinner_server_array">
+        <item>www.baidu.com</item>
+        <item>www.jike.com</item>
+        <item>www.imooc.com</item>
+        <item>www.sinna.com</item>
+    </array>
+</resources>

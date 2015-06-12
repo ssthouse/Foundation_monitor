@@ -1,38 +1,71 @@
 package dian.org.monitor;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ListView;
 
+/**
+ * 展示项目列表的主界面
+ * Created by ssthouse on 2015/6/8.
+ */
+public class MainActivity extends Activity {
+    private static final String TAG = "MainActivity";
 
-public class MainActivity extends ActionBarActivity {
+    private static final int REQUEST_CODE = 1000;
+
+    /**
+     * 主界面的lvAdapter
+     */
+    private MainLvAdapter lvAdapter;
+
+    /**
+     * 设置按钮
+     */
+    private ImageView ivSetting;
+    /**
+     * 主视图的ListView
+     */
+    private ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_aty);
+
+        initView();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    /**
+     * 初始化View
+     */
+    private void initView() {
+        ivSetting = (ImageView) findViewById(R.id.id_iv_setting);
+        ivSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SettingAty.class);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        //初始化主界面列表
+        lv = (ListView) findViewById(R.id.id_lv_main);
+        lvAdapter = new MainLvAdapter(this);
+        lv.setAdapter(lvAdapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //根据lvAdapter获取数据***传递给详细页面的
+                ProjectItem projectItem = lvAdapter.getDataList().get(position);
+                Intent intent = new Intent(MainActivity.this, TourListAty.class);
+                intent.putExtra(Constant.INTENT_KEY_DATA_PROJECT_ITEM, projectItem);
+                //将ProjectItem传递给TourListAty
+                startActivity(intent);
+            }
+        });
     }
 }
