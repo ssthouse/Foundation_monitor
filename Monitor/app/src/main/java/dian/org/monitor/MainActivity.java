@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import dian.org.monitor.db.DbFileManager;
 import dian.org.monitor.style.TransparentStyle;
 
 /**
@@ -41,6 +42,9 @@ public class MainActivity extends Activity {
         TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
 
         initView();
+
+        //TODO
+        DbFileManager.getDb(DbFileManager.DATABASE_PATH+"prjName2/", "1");
     }
 
     /**

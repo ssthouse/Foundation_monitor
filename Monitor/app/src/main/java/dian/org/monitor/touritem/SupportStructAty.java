@@ -3,6 +3,7 @@ package dian.org.monitor.touritem;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -11,6 +12,9 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 import dian.org.monitor.Constant;
 import dian.org.monitor.R;
@@ -24,10 +28,6 @@ import dian.org.monitor.util.PictureManager;
  */
 public class SupportStructAty extends Activity {
     private static final String TAG = "SupportStructAty****";
-
-    //***************requestCode********************************
-    private static final int REQUEST_CODE_PICK_IMAGE = 1000;
-    private static final int REQUEST_CODE_CAPTURE_CAMEIA = 1001;
 
     /**
      * 传递的数据
@@ -51,12 +51,11 @@ public class SupportStructAty extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.support_struct_aty);
 
-
         //初始化一些数据
         tourItem = (TourItem) getIntent().getSerializableExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM);
         //初始化当前Activity所在的项目的picture路径
         picturePath = PictureManager.PICTURE_PATH + tourItem.getPrjName() + "/" +
-                tourItem.getNumber() +"/"+ PictureManager.PICTURE_PATH_SUPPORT_STRUCT;
+                tourItem.getNumber() + "/" + PictureManager.PICTURE_PATH_SUPPORT_STRUCT;
 
         //透明顶栏
         TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
@@ -96,14 +95,23 @@ public class SupportStructAty extends Activity {
     /**
      * 初始化gvPicture
      */
-    private void initGvPicture(){
-        //在这里设置GridView的细节点击事件
-        Log.e(TAG, "我现在还有---个"+gvPicture.getCount());
+    private void initGvPicture() {
+//        Log.e(TAG, "我现在还有---个" + gvPicture.getCount());
         for (int i = 0; i < gvPicture.getCount(); i++) {
             final int position = i;
             //判断是否为最后一个
             if (i < (gvPicture.getCount() - 1)) {
+                //为图片点击获取查看监听器
                 View view = gvPicture.getChildAt(i);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //在图库中查看图片
+                        PictureManager.viewPictureFromAlbum(SupportStructAty.this,
+                                gridViewAdapter.getBitmapItemList().get(position));
+                    }
+                });
+                //为图片删除设置监听事件
                 ImageView ivDelete = (ImageView) view.findViewById(R.id.id_iv_grid_view_delete);
                 ivDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -115,15 +123,13 @@ public class SupportStructAty extends Activity {
                     }
                 });
             } else {
-                //TODO
                 //启动相机或者图库----获取数据---改变adapter---notify数据变化
                 View view = gvPicture.getChildAt(i);
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //开启图库
-                        PictureManager.getImageFromAlbum(SupportStructAty.this,
-                                REQUEST_CODE_PICK_IMAGE);
+                        //开启图片来源选择Dialog
+                        DialogManager.showAlbumOrCameraDialog(SupportStructAty.this);
                     }
                 });
             }
@@ -148,44 +154,67 @@ public class SupportStructAty extends Activity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_PICK_IMAGE && null != data) {
+        //判断是图库---还是照相机
+        if (requestCode == Constant.REQUEST_CODE_ALBUM && null != data) {
+            //根据uri获取图片路径
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
             cursor.moveToFirst();
-
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String srcPath = cursor.getString(columnIndex);
             cursor.close();
             //将照片保存到指定文件夹
             PictureManager.saveImage(srcPath, picturePath +
-                    PictureManager.getPictureNumber(picturePath) + ".jpeg");
+                    Calendar.getInstance().getTimeInMillis() + ".jpeg");
             //更新界面
             gridViewAdapter = new GridViewAdapter(this, tourItem,
                     PictureManager.PICTURE_PATH_SUPPORT_STRUCT);
             gvPicture.setAdapter(gridViewAdapter);
+            //改变焦点
             DialogManager.showInVisiableDialog(this);
-        } else {
-            Log.e(TAG, "something is wrong!!!");
+        } else if (requestCode == Constant.RESULT_CODE_CAMERA && null != data) {
+            Uri uri = data.getData();
+            if (uri == null) {
+                Log.e(TAG, "拍照的uri是空的!!!");
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    Bitmap photo = (Bitmap) bundle.get("data"); //get bitmap
+                    //直接将Bitmap保存到指定路径
+                    PictureManager.saveImage(photo, picturePath +
+                            Calendar.getInstance().getTimeInMillis() + ".jpeg");
+                    //更新界面
+                    gridViewAdapter = new GridViewAdapter(this, tourItem,
+                            PictureManager.PICTURE_PATH_SUPPORT_STRUCT);
+                    gvPicture.setAdapter(gridViewAdapter);
+                    //改变焦点
+                    DialogManager.showInVisiableDialog(this);
+                } else {
+                    Toast.makeText(getApplicationContext(), "该照片获取失败!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            } else {
+                Log.e(TAG, "拍照的uri不是空的");
+                //根据uri获取图片路径
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String srcPath = cursor.getString(columnIndex);
+                cursor.close();
+                //将照片保存到指定文件夹
+                PictureManager.saveImage(srcPath, picturePath +
+                        Calendar.getInstance().getTimeInMillis() + ".jpeg");
+                //更新界面
+                gridViewAdapter = new GridViewAdapter(this, tourItem,
+                        PictureManager.PICTURE_PATH_SUPPORT_STRUCT);
+                gvPicture.setAdapter(gridViewAdapter);
+                //改变焦点
+                DialogManager.showInVisiableDialog(this);
+            }
         }
-//        else if (requestCode == REQUEST_CODE_CAPTURE_CAMEIA) {
-//            Uri uri = data.getData();
-//            if (uri == null) {
-//                //use bundle to get data
-//                Bundle bundle = data.getExtras();
-//                if (bundle != null) {
-//                    Bitmap photo = (Bitmap) bundle.get("data"); //get bitmap
-//                    //spath :生成图片取个名字和路径包含类型
-//                    PictureManager.saveImage(photo, picturePath);
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "err****", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-//            } else {
-//                //to do find the path of pic by uri
-//            }
-//        }
     }
 }

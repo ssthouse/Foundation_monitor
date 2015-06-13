@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dian.org.monitor.Constant;
 import dian.org.monitor.touritem.BitmapItem;
 import dian.org.monitor.touritem.TourItem;
 
@@ -26,19 +28,37 @@ import dian.org.monitor.touritem.TourItem;
  * Created by ssthouse on 2015/6/11.
  */
 public class PictureManager {
-
     private static final String TAG = "PictureManager";
 
     //图片文件的路径
     public static final String PICTURE_PATH = "/data/data/dian.org.monitor/picture/";
-    //数据库文件的路径
-    public static final String DATABASE_PATH = "/data/data/dian.org.monitor/database/";
     //每个细节的图片的路径
     public static final String PICTURE_PATH_WEATHER_STATE = "WeatherState/";
     public static final String PICTURE_PATH_SUPPORT_STRUCT = "SupportStruct/";
     public static final String PICTURE_PATH_CONSTRUCT_STATE = "ConstructState/";
     public static final String PICTURE_PATH_SURROUND_ENV = "SurroundEnv/";
     public static final String PICTURE_PATH_MONITOR_FACILITY = "MonitorFacility/";
+
+
+    /**
+     * 将图片保存到指定的目录
+     * @param photo
+     * @param spath
+     * @return
+     */
+    public static boolean saveImage(Bitmap photo, String spath) {
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(
+                    new FileOutputStream(spath, false));
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
     /**
      * 将图片从指定文件夹---复制到目标文件夹
@@ -49,7 +69,7 @@ public class PictureManager {
      */
     public static boolean saveImage(String srcPath, String targetPath) {
         //TODO
-        Log.e(TAG, "我是目标文件" + srcPath);
+        Log.e(TAG, "我是源文件" + srcPath);
         Log.e(TAG, "我是目标文件" + targetPath);
         //判断路径是否为空
         if (srcPath == null) {
@@ -174,7 +194,7 @@ public class PictureManager {
      * @param context
      * @param bitmapItem
      */
-    public void viewPictureFromAlbum(Context context, BitmapItem bitmapItem) {
+    public static void viewPictureFromAlbum(Context context, BitmapItem bitmapItem) {
         //使用Intent
         Intent intent = new Intent(Intent.ACTION_VIEW);
         //Uri mUri = Uri.parse("file://" + picFile.getPath());Android3.0以后最好不要通过该方法，存在一些小Bug
@@ -186,27 +206,25 @@ public class PictureManager {
      * 开启图库获取照片
      *
      * @param activity
-     * @param requestCode
      */
-    public static void getImageFromAlbum(Activity activity, int requestCode) {
+    public static void getPictureFromAlbum(Activity activity) {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");//相片类型
-        activity.startActivityForResult(intent, requestCode);
+        activity.startActivityForResult(intent, Constant.REQUEST_CODE_ALBUM);
     }
 
     /**
      * 开启照相机获取照片
      *
      * @param activity
-     * @param requestCode
      */
-    public void getImageFromCamera(Activity activity, int requestCode) {
+    public static void getPictureFromCamera(Activity activity) {
         String state = Environment.getExternalStorageState();
         if (state.equals(Environment.MEDIA_MOUNTED)) {
             Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
-            activity.startActivityForResult(getImageByCamera, requestCode);
+            activity.startActivityForResult(getImageByCamera, Constant.RESULT_CODE_CAMERA);
         } else {
-            Toast.makeText(activity, "请确认已经插入SD卡", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "请确认已经插入SD卡", Toast.LENGTH_SHORT).show();
         }
     }
 }

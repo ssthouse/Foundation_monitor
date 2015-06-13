@@ -1,7 +1,6 @@
 package dian.org.monitor.touritem;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +91,7 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.e(TAG, "position:"+position);
+//        Log.e(TAG, "position:"+position);
         //判断是不是最后一张---填充数据
         if (position < bitmapItemList.size()) {
             FrameLayout fl = (FrameLayout) LayoutInflater.from(context).

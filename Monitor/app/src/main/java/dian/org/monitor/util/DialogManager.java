@@ -1,7 +1,9 @@
 package dian.org.monitor.util;
 
 import android.app.Activity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
@@ -18,31 +20,40 @@ public class DialogManager {
      */
     public static void showInVisiableDialog(final Activity activity) {
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(activity);
-        dialogBuilder.withTitle("确认退出?")             //.withTitle(null)  no title
-                .withTitleColor("#FFFFFF")
-                .withDividerColor("#11000000")
-                .withMessage("退出将不会保存当前编辑的数据!")//.withMessage(null)  no Msg
-                .withMessageColor("#FFFFFFFF")
+        dialogBuilder.withDuration(10).show();
+        dialogBuilder.dismiss();
+    }
+
+    /**
+     * 显示---选择拍照开始图库的Dialog
+     *
+     * @param activity
+     */
+    public static void showAlbumOrCameraDialog(final Activity activity) {
+        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(activity);
+        LinearLayout llMain = (LinearLayout) LayoutInflater.from(activity).
+                inflate(R.layout.album_or_camera_dialog, null);
+        llMain.findViewById(R.id.id_ll_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogBuilder.dismiss();
+                PictureManager.getPictureFromCamera(activity);
+            }
+        });
+        llMain.findViewById(R.id.id_ll_album).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogBuilder.dismiss();
+                PictureManager.getPictureFromAlbum(activity);
+            }
+        });
+        dialogBuilder.withTitle(null)             //.withTitle(null)  no title
+                .withMessage(null)//.withMessage(null)  no Msg
                 .withDialogColor(activity.getResources().getColor(R.color.dialog_color))
                 .withEffect(Effectstype.Slidetop)       //def Effectstype.Slidetop
-                .withButton1Text("确认")                 //def gone
-                .withButton2Text("取消")                 //def gone
-                .isCancelableOnTouchOutside(false)
-                .setButton1Click(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialogBuilder.dismiss();
-                        activity.finish();
-                    }
-                })
-                .setButton2Click(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialogBuilder.dismiss();
-                    }
-                })
-                .withDuration(10)
+                .isCancelableOnTouchOutside(false)       //设为可以点击空白退出
+                .setCustomView(llMain, activity)
+                .withDuration(200)
                 .show();
-        dialogBuilder.dismiss();
     }
 }

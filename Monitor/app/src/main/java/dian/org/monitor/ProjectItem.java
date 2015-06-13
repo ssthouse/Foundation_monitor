@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import dian.org.monitor.db.DbFileManager;
 import dian.org.monitor.touritem.TourItem;
 
 /**
@@ -27,7 +28,6 @@ public class ProjectItem implements Serializable{
      */
     private List<TourItem> tourItemList;
 
-
     /**
      * 构造方法
      * 根据项目的名称***向服务器请求该工程的数据
@@ -35,9 +35,7 @@ public class ProjectItem implements Serializable{
     public ProjectItem(String prjName) {
         this.prjName = prjName;
         //根据名字获取各种数据
-        //暂时默认为3
-        prjTourNum = 3;
-        //初始化TourItemList的数据***根据工程名字!!!
+        prjTourNum = DbFileManager.getTourNumber(prjName);
         //TODO
         initTourItemList();
     }
