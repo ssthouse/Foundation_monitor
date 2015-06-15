@@ -101,6 +101,12 @@ public class WeatherStateAty extends Activity {
         etRainFall = (EditText) findViewById(R.id.id_et_rainFall);
         etWindSpeed = (EditText) findViewById(R.id.id_et_windSpeed);
         etWaterLevel = (EditText) findViewById(R.id.id_et_waterLevel);
+        if (weatherState != null) {
+            etTemperature.setText(weatherState.getTemperatureItem1());
+            etRainFall.setText(weatherState.getRainFallItem2());
+            etWindSpeed.setText(weatherState.getWindSpeedItem3());
+            etWaterLevel.setText(weatherState.getWaterLevelItem4());
+        }
 
         //智能填充
         TextView tvSmartFill = (TextView) findViewById(R.id.id_tv_smart_fill);

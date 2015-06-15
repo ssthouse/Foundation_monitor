@@ -419,9 +419,6 @@ public class TourEditAty extends Activity {
     private void showDatePickerDialog() {
         //新建dialog
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(this);
-        //初始化dialogBuilder界面
-        CalendarView calendarView = (CalendarView) dialogBuilder.findViewById(R.id.id_cv_date_picker);
-        calendarView.setDate(Long.parseLong(tourItem.getTourInfo().getTimeInMilesStr()));
         //确定监听器
         View.OnClickListener sureListener = new View.OnClickListener() {
             @Override
@@ -459,5 +456,8 @@ public class TourEditAty extends Activity {
                 .withDuration(400)
                 .setCustomView(R.layout.tour_date_picker_dialog, this)
                 .show();
+        //初始化dialogBuilder界面
+        CalendarView calendarView = (CalendarView) dialogBuilder.findViewById(R.id.id_cv_date_picker);
+        calendarView.setDate(Long.parseLong(tourItem.getTourInfo().getTimeInMilesStr()));
     }
 }
