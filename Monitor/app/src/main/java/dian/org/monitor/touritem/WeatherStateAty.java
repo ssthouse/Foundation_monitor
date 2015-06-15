@@ -1,38 +1,60 @@
 package dian.org.monitor.touritem;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
+import dian.org.monitor.Constant;
 import dian.org.monitor.R;
 import dian.org.monitor.style.TransparentStyle;
+import dian.org.monitor.util.EditTextUtil;
 
 /**
  * 编辑weatherState的Activity
  * Created by ssthouse on 2015/6/11.
  */
 public class WeatherStateAty extends Activity {
+    private static final String TAG = "WeatherStateASty";
+
+    /**
+     * 该Activity编辑的数据
+     */
+    private WeatherState weatherState;
+
+    private EditText etTemperature;
+
+    private EditText etRainFall;
+
+    private EditText etWindSpeed;
+
+    private EditText etWaterLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_state_aty);
-
-
         //透明顶栏
         TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
+        //获取数据
+        weatherState = (WeatherState) getIntent().getSerializableExtra("data");
+        if (weatherState == null) {
+            Log.e(TAG, "天哪...我收到的weatherState竟然是空的!!!");
+        }
         initView();
     }
 
     /**
      * 初始化View
      */
-    private void initView(){
+    private void initView() {
         //返回
         ImageView ivBack = (ImageView) findViewById(R.id.id_iv_back);
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -47,10 +69,38 @@ public class WeatherStateAty extends Activity {
         tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO---获取EditText数据---保存数据---回调TourEditAty
-                finish();
+                //判断数据是否有空的
+                if (EditTextUtil.isEmpty(etTemperature) ||
+                        EditTextUtil.isEmpty(etRainFall) ||
+                        EditTextUtil.isEmpty(etWindSpeed) ||
+                        EditTextUtil.isEmpty(etWaterLevel)) {
+//                    ToastUtil.showToast(WeatherStateAty.this, "数据不可为空!");
+                } else {
+//                    ToastUtil.showToast(WeatherStateAty.this, "数据通过!");
+//                    Log.e(TAG, "我即将回调tourEdit");
+                    /*
+                    将数据回调给调用的Activity
+                     */
+                    //先将改变的数据填充
+                    weatherState.setTemperatureItem1(etTemperature.getText().toString());
+                    weatherState.setRainFallItem2(etRainFall.getText().toString());
+                    weatherState.setWindSpeedItem3(etWindSpeed.getText().toString());
+                    weatherState.setWaterLevelItem4(etWaterLevel.getText().toString());
+                    //将改好的数据放进Intent---并传回
+                    Intent resultIntent = getIntent();
+//                    Log.e(TAG, "我的第一项数据是:" + weatherState.getTemperatureItem1());
+                    resultIntent.putExtra("data", weatherState);
+                    setResult(Constant.RESULT_CODE_SAVE, resultIntent);
+                    finish();
+                }
             }
         });
+
+        //四个数据的Edittext
+        etTemperature = (EditText) findViewById(R.id.id_et_temperature);
+        etRainFall = (EditText) findViewById(R.id.id_et_rainFall);
+        etWindSpeed = (EditText) findViewById(R.id.id_et_windSpeed);
+        etWaterLevel = (EditText) findViewById(R.id.id_et_waterLevel);
 
         //智能填充
         TextView tvSmartFill = (TextView) findViewById(R.id.id_tv_smart_fill);
@@ -81,6 +131,7 @@ public class WeatherStateAty extends Activity {
                 .setButton1Click(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        dialogBuilder.dismiss();
                         finish();
                     }
                 })
@@ -92,5 +143,11 @@ public class WeatherStateAty extends Activity {
                 })
                 .withDuration(400)
                 .show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        showExitDialog();
+        super.onBackPressed();
     }
 }

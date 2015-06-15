@@ -47,6 +47,7 @@ public class DbFileManager {
 
     /**
      * 根据prjName获取数据库数量
+     *
      * @param prjName
      * @return
      */
@@ -55,7 +56,18 @@ public class DbFileManager {
             return 0;
         }
         File prjPath = new File(DbFileManager.DATABASE_PATH + prjName);
-        return prjPath.list().length;
+        String fileNames[] = prjPath.list();
+        if (fileNames == null) {
+            return 0;
+        }
+        //排除掉文件名中系统生成的数据库
+        int fileNumber = 0;
+        for (String filename : fileNames) {
+            if (!filename.contains("journal")) {
+                fileNumber++;
+            }
+        }
+        return fileNumber;
     }
 
     /**
@@ -65,7 +77,11 @@ public class DbFileManager {
      * @return
      */
     public static String getDbPath(TourItem tourItem) {
-        String strPath = DATABASE_PATH + tourItem.getPrjName() +
+        //如果prjName是空的----直接返回null
+        if (tourItem.getTourInfo().getPrjName().equals("")) {
+            return null;
+        }
+        String strPath = DATABASE_PATH + tourItem.getTourInfo().getPrjName() +
                 "/";
         return strPath;
     }
@@ -79,13 +95,36 @@ public class DbFileManager {
     public static SQLiteDatabase getDb(TourItem tourItem) {
         //如果文件夹不存在---必须先创建--否则会跪掉
         String path = getDbPath(tourItem);
+        if (path == null) {
+            return null;
+        }
         File file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
         }
         //打开数据库
-        SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(path + tourItem.getNumber(), null);
-        return database;
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(path +
+                tourItem.getTourInfo().getTourNumber(), null);
+        //先判断db的表是否为空
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_TOUR_INFO)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_TOUR_INFO);
+        }
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_WEATHER_STATE)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_WEATHER_STATE);
+        }
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_SUPPORT_STRUCT)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_SUPPORT_STRUCT);
+        }
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_CONSTRUCT_STATE)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_CONSTRUCT_STATE);
+        }
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_SURROUND_ENV)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_SURROUND_ENV);
+        }
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_MONITOR_FACILITY)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_MONITOR_FACILITY);
+        }
+        return db;
     }
 
     /**
@@ -100,7 +139,26 @@ public class DbFileManager {
             file.mkdirs();
         }
         //打开数据库
-        SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(dbPath + fileName, null);
-        return database;
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(dbPath + fileName, null);
+        //先判断db的表是否为空
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_TOUR_INFO)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_TOUR_INFO);
+        }
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_WEATHER_STATE)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_WEATHER_STATE);
+        }
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_SUPPORT_STRUCT)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_SUPPORT_STRUCT);
+        }
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_CONSTRUCT_STATE)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_CONSTRUCT_STATE);
+        }
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_SURROUND_ENV)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_SURROUND_ENV);
+        }
+        if (!TourDbHelper.isTableExist(db, TourDbHelper.TABLE_MONITOR_FACILITY)) {
+            TourDbHelper.createTable(db, TourDbHelper.TABLE_MONITOR_FACILITY);
+        }
+        return db;
     }
 }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import dian.org.monitor.Constant;
 import dian.org.monitor.R;
 import dian.org.monitor.style.TransparentStyle;
 import dian.org.monitor.util.DialogManager;
+import dian.org.monitor.util.EditTextUtil;
 import dian.org.monitor.util.PictureManager;
 
 /**
@@ -33,16 +35,23 @@ public class SupportStructAty extends Activity {
      * 传递的数据
      */
     private TourItem tourItem;
-
     /**
      * 照片的路径
      */
     private String picturePath;
-
     /**
      * 展示照片的gridView
      */
     private GridView gvPicture;
+
+    //一些EditText
+    private EditText etQualityItem1;
+    private EditText etCrackItem2;
+    private EditText etTransformItem3;
+    private EditText etLeakItem4;
+    private EditText etSlipItem5;
+    private EditText etPourItem6;
+    private EditText etOtherItem7;
 
     private GridViewAdapter gridViewAdapter;
 
@@ -51,14 +60,15 @@ public class SupportStructAty extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.support_struct_aty);
 
-        //初始化一些数据
+        //初始化数据
         tourItem = (TourItem) getIntent().getSerializableExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM);
         //初始化当前Activity所在的项目的picture路径
-        picturePath = PictureManager.PICTURE_PATH + tourItem.getPrjName() + "/" +
-                tourItem.getNumber() + "/" + PictureManager.PICTURE_PATH_SUPPORT_STRUCT;
-
+        picturePath = PictureManager.PICTURE_PATH + tourItem.getTourInfo().getPrjName() + "/" +
+                tourItem.getTourInfo().getTourNumber() + "/"
+                + PictureManager.PICTURE_PATH_SUPPORT_STRUCT;
         //透明顶栏
         TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
+        //初始化View
         initView();
     }
 
@@ -81,9 +91,49 @@ public class SupportStructAty extends Activity {
         tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO  保存数据
+                //确保没有空项
+                if (EditTextUtil.isEmpty(etQualityItem1) || EditTextUtil.isEmpty(etCrackItem2)
+                        || EditTextUtil.isEmpty(etTransformItem3)
+                        || EditTextUtil.isEmpty(etLeakItem4)
+                        || EditTextUtil.isEmpty(etSlipItem5)
+                        || EditTextUtil.isEmpty(etPourItem6)
+                        || EditTextUtil.isEmpty(etOtherItem7)) {
+                    Toast.makeText(SupportStructAty.this, "不可有空项!", Toast.LENGTH_SHORT).show();
+                } else {
+                    //填充数据
+                    tourItem.getSupportStruct().setQualityItem1(etQualityItem1.getText().toString());
+                    tourItem.getSupportStruct().setCrackItem2(etCrackItem2.getText().toString());
+                    tourItem.getSupportStruct().setTransformItem3(etTransformItem3.getText().toString());
+                    tourItem.getSupportStruct().setLeakItem4(etLeakItem4.getText().toString());
+                    tourItem.getSupportStruct().setSlipItem5(etSlipItem5.getText().toString());
+                    tourItem.getSupportStruct().setPourItem6(etPourItem6.getText().toString());
+                    tourItem.getSupportStruct().setOtherItem7(etOtherItem7.getText().toString());
+                    //回调数据
+                    Intent intent = getIntent();
+                    intent.putExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM, tourItem);
+                    setResult(Constant.RESULT_CODE_SAVE, intent);
+                    finish();
+                }
             }
         });
+
+        //一些Editext
+        etQualityItem1 = (EditText) findViewById(R.id.id_et_quality_item1);
+        etCrackItem2 = (EditText) findViewById(R.id.id_et_crack_item2);
+        etTransformItem3 = (EditText) findViewById(R.id.id_et_transform_item3);
+        etLeakItem4 = (EditText) findViewById(R.id.id_et_leak_item4);
+        etSlipItem5 = (EditText) findViewById(R.id.id_et_slip_item5);
+        etPourItem6 = (EditText) findViewById(R.id.id_et_pour_item6);
+        etOtherItem7 = (EditText) findViewById(R.id.id_et_other_item7);
+        if(tourItem!=null){
+            etQualityItem1.setText(tourItem.getSupportStruct().getQualityItem1());
+            etCrackItem2.setText(tourItem.getSupportStruct().getCrackItem2());
+            etTransformItem3.setText(tourItem.getSupportStruct().getTransformItem3());
+            etLeakItem4.setText(tourItem.getSupportStruct().getLeakItem4());
+            etSlipItem5.setText(tourItem.getSupportStruct().getSlipItem5());
+            etPourItem6.setText(tourItem.getSupportStruct().getPourItem6());
+            etOtherItem7.setText(tourItem.getSupportStruct().getOtherItem7());
+        }
 
         //照片选择的GridView
         gvPicture = (GridView) findViewById(R.id.id_gv_picture);

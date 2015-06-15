@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.List;
 
 import dian.org.monitor.touritem.TourItem;
@@ -39,6 +40,7 @@ public class TourLvAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+//        Log.e(TAG, "我有"+dataList.size()+"个数据");
         return dataList.size();
     }
 
@@ -61,16 +63,22 @@ public class TourLvAdapter extends BaseAdapter {
             viewHolder.tvDate = (TextView) convertView.findViewById(R.id.id_tv_date);
             viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.id_tv_number);
             //填充数据
-            viewHolder.tvNumber.setText(strTvNumber + dataList.get(position).getNumber());
-            String strDate = StringUtil.getFormatDate(dataList.get(position).getCalendar());
+            viewHolder.tvNumber.setText(strTvNumber + dataList.get(position)
+                    .getTourInfo().getTourNumber());
+            Calendar calendar = StringUtil.getCalendarFromTimeInMiles(dataList.get(position)
+                    .getTourInfo().getTimeInMilesStr());
+            String strDate = StringUtil.getFormatDate(calendar);
             viewHolder.tvDate.setText(strDate);
             //添加标签
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
             //填充数据
-            viewHolder.tvNumber.setText(strTvNumber + dataList.get(position).getNumber());
-            String strDate = StringUtil.getFormatDate(dataList.get(position).getCalendar());
+            viewHolder.tvNumber.setText(strTvNumber + dataList.get(position)
+                    .getTourInfo().getTourNumber());
+            Calendar calendar = StringUtil.getCalendarFromTimeInMiles(
+                    dataList.get(position).getTourInfo().getTimeInMilesStr());
+            String strDate = StringUtil.getFormatDate(calendar);
             viewHolder.tvDate.setText(strDate);
         }
         return convertView;

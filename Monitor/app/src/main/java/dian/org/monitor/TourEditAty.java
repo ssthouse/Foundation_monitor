@@ -2,7 +2,9 @@ package dian.org.monitor;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -16,16 +18,21 @@ import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
 import java.util.Calendar;
 
+import dian.org.monitor.db.DbFileManager;
+import dian.org.monitor.db.TourDbHelper;
 import dian.org.monitor.style.TransparentStyle;
+import dian.org.monitor.touritem.ConstructStateAty;
+import dian.org.monitor.touritem.MonitorFacilityAty;
 import dian.org.monitor.touritem.SupportStructAty;
+import dian.org.monitor.touritem.SurroundEnvAty;
 import dian.org.monitor.touritem.TourItem;
+import dian.org.monitor.touritem.WeatherState;
 import dian.org.monitor.touritem.WeatherStateAty;
 import dian.org.monitor.util.StringUtil;
 
 /**
  * Created by ssthouse on 2015/6/10.
  * 开启该Activity需要---传入一个TourItem
- * TODO 如何回调数据的变化???
  */
 public class TourEditAty extends Activity {
     private static final String TAG = "TourEditAty*******";
@@ -69,6 +76,9 @@ public class TourEditAty extends Activity {
         setContentView(R.layout.tour_edit_aty);
         //透明顶栏
         TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
+        //获取TourItem数据
+        Intent intent = getIntent();
+        tourItem = (TourItem) intent.getSerializableExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM);
         initView();
     }
 
@@ -76,10 +86,6 @@ public class TourEditAty extends Activity {
      * 初始化View
      */
     private void initView() {
-        //获取TourItem数据
-        Intent intent = getIntent();
-        tourItem = (TourItem) intent.getSerializableExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM);
-
         //返回按钮
         ImageView ivBack = (ImageView) findViewById(R.id.id_iv_back);
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -92,24 +98,29 @@ public class TourEditAty extends Activity {
 
         //ActionBar工程名
         TextView tvAbPrjName = (TextView) findViewById(R.id.id_tv_ab_prjName);
-        tvAbPrjName.setText(tourItem.getPrjName());
+        tvAbPrjName.setText(tourItem.getTourInfo().getPrjName());
 
         //保存TextView
         TextView tvSave = (TextView) findViewById(R.id.id_tv_save);
         tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO  保存数据----回调启动的Activity???
+//                Log.e(TAG, "我点击了保存");
+                //打开对应数据库
+                SQLiteDatabase db = DbFileManager.getDb(tourItem);
+                TourDbHelper.setTourItem(db, tourItem);
+                //保存数据
                 finish();
             }
         });
 
         //工程名
         TextView tvPrjName = (TextView) findViewById(R.id.id_tv_prjName);
-        tvPrjName.setText(tourItem.getPrjName());
+        tvPrjName.setText(tourItem.getTourInfo().getPrjName());
 
         //观测次数
         tvNumber = (TextView) findViewById(R.id.id_tv_number);
+        tvNumber.setText("第 "+tourItem.getTourInfo().getTourNumber()+" 次");
         LinearLayout llNumber = (LinearLayout) findViewById(R.id.id_ll_number);
         llNumber.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +131,7 @@ public class TourEditAty extends Activity {
 
         //观测者
         tvObserver = (TextView) findViewById(R.id.id_tv_observer);
+        tvObserver.setText(tourItem.getTourInfo().getObserver());
         LinearLayout llObserver = (LinearLayout) findViewById(R.id.id_ll_observer);
         llObserver.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +142,8 @@ public class TourEditAty extends Activity {
 
         //观测日期
         tvDate = (TextView) findViewById(R.id.id_tv_date);
-        tvDate.setText(StringUtil.getFormatDate(tourItem.getCalendar()));
+        tvDate.setText(StringUtil.getFormatDate(StringUtil.getCalendarFromTimeInMiles(
+                tourItem.getTourInfo().getTimeInMilesStr())));
         LinearLayout llDate = (LinearLayout) findViewById(R.id.id_ll_date);
         llDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,8 +158,11 @@ public class TourEditAty extends Activity {
         llWeatherState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO  启动自然条件编辑Activity
                 Intent intent = new Intent(TourEditAty.this, WeatherStateAty.class);
+                intent.putExtra("data", tourItem.getWeatherState());
+                if(tourItem.getWeatherState()==null){
+                    Log.e(TAG, "天啊...我传递给WeatherStateAty的数据竟然是空的!!!");
+                }
                 startActivityForResult(intent, REQUEST_CODE_WEATHER_STATE);
             }
         });
@@ -157,7 +173,6 @@ public class TourEditAty extends Activity {
         llSupportStruct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
                 Intent intent = new Intent(TourEditAty.this, SupportStructAty.class);
                 intent.putExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM, tourItem);
                 startActivityForResult(intent, REQUEST_CODE_SUPPORT_STRUCT);
@@ -170,7 +185,9 @@ public class TourEditAty extends Activity {
         llConstructState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+                Intent intent = new Intent(TourEditAty.this, ConstructStateAty.class);
+                intent.putExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM, tourItem);
+                startActivityForResult(intent, REQUEST_CODE_CONSTRUCT_STATE);
             }
         });
 
@@ -180,7 +197,9 @@ public class TourEditAty extends Activity {
         llSurroundEnv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+                Intent intent = new Intent(TourEditAty.this, SurroundEnvAty.class);
+                intent.putExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM, tourItem);
+                startActivityForResult(intent, REQUEST_CODE_SURROUND_ENV);
             }
         });
 
@@ -190,34 +209,82 @@ public class TourEditAty extends Activity {
         llMonitorFacility.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+                Intent intent = new Intent(TourEditAty.this, MonitorFacilityAty.class);
+                intent.putExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM, tourItem);
+                startActivityForResult(intent, REQUEST_CODE_MONITOR_FACILITY);
             }
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        Log.e(TAG, "我回调了----tourEditAty");
         switch (requestCode) {
             case REQUEST_CODE_WEATHER_STATE:
-
+                Log.e(TAG, "我回调了---TourEditActivity----weatherState");
+                if (resultCode == Constant.RESULT_CODE_SAVE) {
+                    //更新weatherState数据
+                    WeatherState weatherState = (WeatherState) data.getSerializableExtra("data");
+                    tourItem.setWeatherState(weatherState);
+                    Log.e(TAG, "我改变了weatherState");
+                } else if (resultCode == Constant.RESULT_CODE_CANCEL) {
+                    //do nothing
+                }
                 break;
             case REQUEST_CODE_SUPPORT_STRUCT:
-
+                if (resultCode == Constant.RESULT_CODE_SAVE) {
+                    //更新数据---如果不为空的话
+                    TourItem tourItem = (TourItem) data.getSerializableExtra(
+                            Constant.INTENT_KEY_DATA_TOUR_ITEM);
+                    if(tourItem != null){
+                        this.tourItem = tourItem;
+                    }
+                    Log.e(TAG, "我改变了SupportStruct");
+                }
                 break;
             case REQUEST_CODE_CONSTRUCT_STATE:
-
+                if (resultCode == Constant.RESULT_CODE_SAVE) {
+                    //更新数据---如果不为空的话
+                    TourItem tourItem = (TourItem) data.getSerializableExtra(
+                            Constant.INTENT_KEY_DATA_TOUR_ITEM);
+                    if(tourItem != null){
+                        this.tourItem = tourItem;
+                    }
+                    Log.e(TAG, "我改变了construct_state");
+                }
                 break;
             case REQUEST_CODE_SURROUND_ENV:
-
+                if (resultCode == Constant.RESULT_CODE_SAVE) {
+                    //更新数据---如果不为空的话
+                    TourItem tourItem = (TourItem) data.getSerializableExtra(
+                            Constant.INTENT_KEY_DATA_TOUR_ITEM);
+                    if(tourItem != null){
+                        this.tourItem = tourItem;
+                    }
+                    Log.e(TAG, "我改变了surround_env");
+                }
                 break;
             case REQUEST_CODE_MONITOR_FACILITY:
-
+                if (resultCode == Constant.RESULT_CODE_SAVE) {
+                    //更新数据---如果不为空的话
+                    TourItem tourItem = (TourItem) data.getSerializableExtra(
+                            Constant.INTENT_KEY_DATA_TOUR_ITEM);
+                    if(tourItem != null){
+                        this.tourItem = tourItem;
+                    }
+                    Log.e(TAG, "我改变了monitor_facility");
+                }
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    //Dialog*************************************************************************
+    @Override
+    public void onBackPressed() {
+        showExitDialog();
+    }
+
+    //Dialog****************************************************************************************
 
     /**
      * 显示确认退出的Dialog
@@ -275,9 +342,10 @@ public class TourEditAty extends Activity {
                         if (!etNumber.getText().toString().equals("")) {
                             int number = Integer.parseInt(etNumber.getText().toString());
                             if (number > 0) {
-                                tourItem.setNumber(number);
+                                //更新数据
+                                tourItem.getTourInfo().setTourNumber(number);
                                 //更新界面
-                                tvNumber.setText("第 " + tourItem.getNumber() + " 次");
+                                tvNumber.setText("第 " + tourItem.getTourInfo().getTourNumber() + " 次");
                             }
                             dialogBuilder.dismiss();
                         }
@@ -314,7 +382,9 @@ public class TourEditAty extends Activity {
                         Toast.makeText(TourEditAty.this, "观测人不可有空格!", Toast.LENGTH_SHORT).
                                 show();
                     } else {
-                        tourItem.setObserver(strObserver);
+                        //更新数据
+                        tourItem.getTourInfo().setObserver(strObserver);
+                        //更新界面
                         tvObserver.setText(strObserver);
                         dialogBuilder.dismiss();
                     }
@@ -349,6 +419,9 @@ public class TourEditAty extends Activity {
     private void showDatePickerDialog() {
         //新建dialog
         final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(this);
+        //初始化dialogBuilder界面
+        CalendarView calendarView = (CalendarView) dialogBuilder.findViewById(R.id.id_cv_date_picker);
+        calendarView.setDate(Long.parseLong(tourItem.getTourInfo().getTimeInMilesStr()));
         //确定监听器
         View.OnClickListener sureListener = new View.OnClickListener() {
             @Override
@@ -361,6 +434,8 @@ public class TourEditAty extends Activity {
                 //更新界面
                 String strDate = StringUtil.getFormatDate(calendar);
                 tvDate.setText(strDate);
+                //更新数据
+                tourItem.getTourInfo().setTimeInMilesStr(calendar.getTimeInMillis()+"");
                 dialogBuilder.dismiss();
             }
         };
@@ -384,8 +459,5 @@ public class TourEditAty extends Activity {
                 .withDuration(400)
                 .setCustomView(R.layout.tour_date_picker_dialog, this)
                 .show();
-        //初始化dialogBuilder界面
-        CalendarView calendarView = (CalendarView) dialogBuilder.findViewById(R.id.id_cv_date_picker);
-        calendarView.setDate(tourItem.getCalendar().getTimeInMillis());
     }
 }

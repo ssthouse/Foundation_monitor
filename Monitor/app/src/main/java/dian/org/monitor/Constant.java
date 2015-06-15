@@ -17,6 +17,7 @@ public class Constant {
 
 
     //Intent之间传递数据的Key
+    //五种数据之间---是直接用"data
     public static final String INTENT_KEY_DATA_PROJECT_ITEM = "intent_key_data_project_item";
 
     public static final String INTENT_KEY_DATA_TOUR_ITEM = "intent_key_data_tour_item";

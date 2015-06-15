@@ -51,7 +51,7 @@
             android:id="@+id/id_tv_new_tour_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/gray_level0"
+            android:background="@drawable/blue_button_click"
             android:gravity="center"
             android:text="开始巡查"
             android:textColor="@color/white"

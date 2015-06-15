@@ -1,6 +1,7 @@
 package dian.org.monitor;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,13 +47,16 @@ public class MainLvAdapter extends BaseAdapter {
      * @return
      */
     private List<ProjectItem> getPrjDataList() {
+        Log.e(TAG, "我开始获取----prj文件的列表");
         //获取用户名
         String userName = PreferenceManager.getSharedPerference(mContext).
                 getString(PreferenceManager.PREFERENCE_KEY_USER_NAME, null);
         //如果用户名为null***返回空
         if (userName == null) {
+            Log.e(TAG, "用户名为空!!!!!!!!!!");
             return null;
         }
+
         //初始化数据
         List<ProjectItem> list = new ArrayList<>();
         //根据文件夹获取priName的列表
@@ -62,8 +66,10 @@ public class MainLvAdapter extends BaseAdapter {
         }
         String prjNames[] = prjDir.list();
         if (prjNames == null) {
+            Log.e(TAG, "project的文件------没有");
             return null;
         } else {
+            Log.e(TAG, "project的文件------有"+prjNames.length);
             for (String prjname : prjNames) {
                 list.add(new ProjectItem(prjname));
             }

@@ -49,4 +49,21 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/id_tv_new_project"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/blue_button_click"
+            android:gravity="center"
+            android:text="添加工程"
+            android:textColor="@color/white"
+            android:textSize="21sp" />
+    </LinearLayout>
 </LinearLayout>

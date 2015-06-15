@@ -134,8 +134,8 @@ public class PictureManager {
         List<BitmapItem> bitmapList = new ArrayList<>();
         //列出picture文件
         File[] fileList;
-        File dir = new File(PICTURE_PATH + tourItem.getPrjName() + "/" + tourItem.getNumber() +
-                "/" + kindPath);
+        File dir = new File(PICTURE_PATH + tourItem.getTourInfo().getPrjName() + "/" +
+                tourItem.getTourInfo().getTourNumber() + "/" + kindPath);
         if (dir.exists()) {
             fileList = dir.listFiles();
         } else {
