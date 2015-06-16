@@ -16,6 +16,7 @@ import dian.org.monitor.Constant;
 import dian.org.monitor.R;
 import dian.org.monitor.style.TransparentStyle;
 import dian.org.monitor.util.EditTextUtil;
+import dian.org.monitor.util.ToastUtil;
 
 /**
  * 编辑weatherState的Activity
@@ -74,9 +75,8 @@ public class WeatherStateAty extends Activity {
                         EditTextUtil.isEmpty(etRainFall) ||
                         EditTextUtil.isEmpty(etWindSpeed) ||
                         EditTextUtil.isEmpty(etWaterLevel)) {
-//                    ToastUtil.showToast(WeatherStateAty.this, "数据不可为空!");
+                    ToastUtil.showToast(WeatherStateAty.this, "数据不可为空!");
                 } else {
-//                    ToastUtil.showToast(WeatherStateAty.this, "数据通过!");
 //                    Log.e(TAG, "我即将回调tourEdit");
                     /*
                     将数据回调给调用的Activity

@@ -71,6 +71,27 @@ public class DbFileManager {
     }
 
     /**
+     * 更改数据库的名称
+     *
+     * @param filePath
+     * @param formerName
+     * @param targetName
+     * @return
+     */
+    public static boolean changeDbFileName(String filePath, String formerName, String targetName) {
+        File file = new File(filePath + formerName);
+        if (!file.exists() || filePath == null || formerName == null || targetName == null) {
+            return false;
+        }
+        //将自动产生的数据库删除
+        File file_journal = new File(filePath + formerName + "-journal");
+        file_journal.delete();
+        //给文件重命名
+        file.renameTo(new File(filePath + targetName));
+        return true;
+    }
+
+    /**
      * 根据TourItem获取数据库的文件路径
      *
      * @param tourItem

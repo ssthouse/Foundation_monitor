@@ -12,6 +12,7 @@ import android.widget.Toast;
 import dian.org.monitor.Constant;
 import dian.org.monitor.MainActivity;
 import dian.org.monitor.R;
+import dian.org.monitor.style.TransparentStyle;
 import dian.org.monitor.util.PreferenceManager;
 
 
@@ -47,7 +48,8 @@ public class LoginAty extends Activity {
         }
 
         setContentView(R.layout.login_aty);
-
+        //透明顶栏
+        TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
         initView();
     }
 

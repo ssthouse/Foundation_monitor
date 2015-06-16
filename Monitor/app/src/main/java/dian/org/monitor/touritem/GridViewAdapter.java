@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.io.File;
 import java.util.List;
@@ -94,11 +94,12 @@ public class GridViewAdapter extends BaseAdapter {
 //        Log.e(TAG, "position:"+position);
         //判断是不是最后一张---填充数据
         if (position < bitmapItemList.size()) {
-            FrameLayout fl = (FrameLayout) LayoutInflater.from(context).
+            LinearLayout fl = (LinearLayout) LayoutInflater.from(context).
                     inflate(R.layout.grid_view_item, null);
             ImageView iv = (ImageView) fl.findViewById(R.id.id_iv_grid_view_picture);
             iv.setImageBitmap(bitmapItemList.get(position).getBitmap());
-            fl.setLayoutParams(new FrameLayout.LayoutParams(picWidth, picWidth));
+            //TODO-----why????
+            fl.setLayoutParams(new AbsListView.LayoutParams(picWidth, picWidth));
             return fl;
         } else {
             ImageView iv = new ImageView(context);

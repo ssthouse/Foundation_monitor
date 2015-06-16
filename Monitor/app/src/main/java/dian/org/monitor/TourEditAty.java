@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
+import java.io.File;
 import java.util.Calendar;
 
 import dian.org.monitor.db.DbFileManager;
@@ -29,6 +30,7 @@ import dian.org.monitor.touritem.TourItem;
 import dian.org.monitor.touritem.WeatherState;
 import dian.org.monitor.touritem.WeatherStateAty;
 import dian.org.monitor.util.StringUtil;
+import dian.org.monitor.util.ToastUtil;
 
 /**
  * Created by ssthouse on 2015/6/10.
@@ -120,7 +122,7 @@ public class TourEditAty extends Activity {
 
         //观测次数
         tvNumber = (TextView) findViewById(R.id.id_tv_number);
-        tvNumber.setText("第 "+tourItem.getTourInfo().getTourNumber()+" 次");
+        tvNumber.setText("第 " + tourItem.getTourInfo().getTourNumber() + " 次");
         LinearLayout llNumber = (LinearLayout) findViewById(R.id.id_ll_number);
         llNumber.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +162,7 @@ public class TourEditAty extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(TourEditAty.this, WeatherStateAty.class);
                 intent.putExtra("data", tourItem.getWeatherState());
-                if(tourItem.getWeatherState()==null){
+                if (tourItem.getWeatherState() == null) {
                     Log.e(TAG, "天啊...我传递给WeatherStateAty的数据竟然是空的!!!");
                 }
                 startActivityForResult(intent, REQUEST_CODE_WEATHER_STATE);
@@ -236,7 +238,7 @@ public class TourEditAty extends Activity {
                     //更新数据---如果不为空的话
                     TourItem tourItem = (TourItem) data.getSerializableExtra(
                             Constant.INTENT_KEY_DATA_TOUR_ITEM);
-                    if(tourItem != null){
+                    if (tourItem != null) {
                         this.tourItem = tourItem;
                     }
                     Log.e(TAG, "我改变了SupportStruct");
@@ -247,7 +249,7 @@ public class TourEditAty extends Activity {
                     //更新数据---如果不为空的话
                     TourItem tourItem = (TourItem) data.getSerializableExtra(
                             Constant.INTENT_KEY_DATA_TOUR_ITEM);
-                    if(tourItem != null){
+                    if (tourItem != null) {
                         this.tourItem = tourItem;
                     }
                     Log.e(TAG, "我改变了construct_state");
@@ -258,7 +260,7 @@ public class TourEditAty extends Activity {
                     //更新数据---如果不为空的话
                     TourItem tourItem = (TourItem) data.getSerializableExtra(
                             Constant.INTENT_KEY_DATA_TOUR_ITEM);
-                    if(tourItem != null){
+                    if (tourItem != null) {
                         this.tourItem = tourItem;
                     }
                     Log.e(TAG, "我改变了surround_env");
@@ -269,7 +271,7 @@ public class TourEditAty extends Activity {
                     //更新数据---如果不为空的话
                     TourItem tourItem = (TourItem) data.getSerializableExtra(
                             Constant.INTENT_KEY_DATA_TOUR_ITEM);
-                    if(tourItem != null){
+                    if (tourItem != null) {
                         this.tourItem = tourItem;
                     }
                     Log.e(TAG, "我改变了monitor_facility");
@@ -342,12 +344,28 @@ public class TourEditAty extends Activity {
                         if (!etNumber.getText().toString().equals("")) {
                             int number = Integer.parseInt(etNumber.getText().toString());
                             if (number > 0) {
-                                //更新数据
-                                tourItem.getTourInfo().setTourNumber(number);
-                                //更新界面
-                                tvNumber.setText("第 " + tourItem.getTourInfo().getTourNumber() + " 次");
+                                //判断当前数字的数据库是否存在
+                                File tourDbFIle = new File(DbFileManager.DATABASE_PATH
+                                        + tourItem.getTourInfo().getPrjName() + "/" + number);
+                                if (tourDbFIle.exists()) {
+                                    ToastUtil.showToast(TourEditAty.this, "该观测次数意存在,不可重复!");
+                                } else {
+                                    //TODO 更改数据库名称---如果当前名称的数据库存在---不可完成更改
+                                    //更改文件名
+                                    DbFileManager.changeDbFileName(DbFileManager.DATABASE_PATH
+                                            + tourItem.getTourInfo().getPrjName() + "/",
+                                            tourItem.getTourInfo().getTourNumber()+"", number+"");
+                                    //更新界面
+                                    tvNumber.setText("第 " + number + " 次");
+                                    //更新数据
+                                    tourItem.getTourInfo().setTourNumber(number);
+                                    dialogBuilder.dismiss();
+                                }
+                            } else {
+                                ToastUtil.showToast(TourEditAty.this, "观测次数不可为0!");
                             }
-                            dialogBuilder.dismiss();
+                        } else {
+                            ToastUtil.showToast(TourEditAty.this, "观测次数不可为空!");
                         }
                     }
                 })
@@ -432,7 +450,7 @@ public class TourEditAty extends Activity {
                 String strDate = StringUtil.getFormatDate(calendar);
                 tvDate.setText(strDate);
                 //更新数据
-                tourItem.getTourInfo().setTimeInMilesStr(calendar.getTimeInMillis()+"");
+                tourItem.getTourInfo().setTimeInMilesStr(calendar.getTimeInMillis() + "");
                 dialogBuilder.dismiss();
             }
         };

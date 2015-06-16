@@ -30,7 +30,7 @@
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:gravity="center_vertical|left"
-            android:text="周边环境"
+            android:text="监测设施"
             android:textColor="@color/white"
             android:textSize="@dimen/actionbar_textsize_normal" />
 
@@ -78,12 +78,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:gravity="center_vertical|left"
-                    android:text="土质情况:"
+                    android:text="基准点、测点完好状况:"
                     android:textSize="@dimen/text_size_normal" />
 
 
                 <EditText
-                    android:id="@+id/id_et_break_state_item1"
+                    android:id="@+id/id_et_base_state_item1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -101,11 +101,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:gravity="center_vertical|left"
-                    android:text="基坑开挖分段长度及分层厚度:"
+                    android:text="监测元件完好情况:"
                     android:textSize="@dimen/text_size_normal" />
 
                 <EditText
-                    android:id="@+id/id_et_leak_tem2"
+                    android:id="@+id/id_et_device_state_item2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -123,55 +123,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:gravity="center_vertical|left"
-                    android:text="地表水、地下水状况:"
+                    android:text="观测工作条件:"
                     android:textSize="@dimen/text_size_normal" />
 
                 <EditText
-                    android:id="@+id/id_et_sink_item3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!--第四项-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center_vertical|left"
-                    android:text="基坑周边地面堆载情况:"
-                    android:textSize="@dimen/text_size_normal" />
-
-                <EditText
-                    android:id="@+id/id_et_surround_state_item4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!--第五项-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center_vertical|left"
-                    android:text="其他:"
-                    android:textSize="@dimen/text_size_normal" />
-
-                <EditText
-                    android:id="@+id/id_et_other_item5"
+                    android:id="@+id/id_et_work_state_item3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>

@@ -17,13 +17,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //聚合数据
+    sourceSets.main{
+        jniLibs.srcDirs = ['libs']
+    }
+
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
-
-//    添加的Dialog
+    //    添加的Dialog
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0@aar'
+    compile files('libs/uk-co-senab-photoview-source.jar')
+    compile files('libs/juhe_sdk_v_2_7.jar')
+    compile files('libs/baidumapapi_v3_4_0.jar')
 }

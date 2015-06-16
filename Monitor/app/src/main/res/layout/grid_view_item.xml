@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center">
+    android:orientation="vertical">
 
-    <!--图片-->
-    <ImageView
-        android:scaleType="centerCrop"
-        android:id="@+id/id_iv_grid_view_picture"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:padding="@dimen/picture_padding"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_gravity="center">
 
-    <!--删除ImageView-->
-    <ImageView
-        android:id="@+id/id_iv_grid_view_delete"
-        android:layout_width="@dimen/picture_delete_width"
-        android:layout_height="@dimen/picture_delete_height"
-        android:layout_gravity="right|top"
-        android:padding="@dimen/picture_delete_padding"
-        android:src="@drawable/pic_delete" />
-</FrameLayout>
+        <!--图片-->
+        <ImageView
+            android:id="@+id/id_iv_grid_view_picture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:padding="@dimen/picture_padding"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher" />
+
+        <!--删除ImageView-->
+        <ImageView
+            android:id="@+id/id_iv_grid_view_delete"
+            android:layout_width="@dimen/picture_delete_width"
+            android:layout_height="@dimen/picture_delete_height"
+            android:layout_gravity="right|top"
+            android:padding="@dimen/picture_delete_padding"
+            android:src="@drawable/pic_delete" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -3,7 +3,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
+
+    <!--上面的actionbar-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionbar_height"
+        android:background="@color/blue_level0"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/id_iv_logo"
+            android:layout_width="@dimen/actionbar_icon_height"
+            android:layout_height="@dimen/actionbar_icon_height"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/id_ab_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="基坑巡视"
+            android:textColor="@color/white"
+            android:textSize="@dimen/actionbar_textsize_normal" />
+    </LinearLayout>
+
 
     <Space
         android:layout_width="match_parent"
@@ -61,6 +92,7 @@
             android:orientation="vertical">
 
             <EditText
+                android:maxLines="1"
                 android:id="@+id/id_et_user_name"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
@@ -68,6 +100,7 @@
                 android:textSize="@dimen/login_aty_normal_font" />
 
             <EditText
+                android:maxLines="1"
                 android:id="@+id/id_et_pass_word"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
@@ -87,11 +120,13 @@
     </LinearLayout>
 
     <Button
-        android:background="@drawable/button_click_selector"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_normal"
         android:id="@+id/id_btn_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:background="@drawable/blue_button_click"
         android:text="登陆" />
 
     <Space

@@ -3,11 +3,12 @@ package dian.org.monitor;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,16 +52,17 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //在使用SDK各组件之前初始化context信息，传入ApplicationContext
+        //注意该方法要再setContentView方法之前实现
+//        SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.main_aty);
         //透明顶栏
         TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
-
+        //初始化View
         initView();
 
         //TODO
-//        SQLiteDatabase db = DbFileManager.getDb(DbFileManager.DATABASE_PATH + "prjName1/", "1");
-//        TourDbHelper.setTourItem(db, new TourItem(false));
-        //TourDbHelper.getTourItem(db);
+//        startActivity(new Intent(this, GpsTestAty.class));
     }
 
     /**
@@ -98,31 +100,35 @@ public class MainActivity extends Activity {
         tvNewProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final EditText etPrjName = new EditText(MainActivity.this);
-                etPrjName.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                final NiftyDialogBuilder dialogBuilder = new NiftyDialogBuilder(MainActivity.this);
+                final LinearLayout llPrjName = (LinearLayout) LayoutInflater.from(MainActivity.this).
+                        inflate(R.layout.prj_name_edit_dialog, null);
+                final EditText etPrjName = (EditText) llPrjName.findViewById(R.id.id_et_prj_name_dialog);
+                final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(MainActivity.this);
                 dialogBuilder.withTitle("请填写工程名")             //.withTitle(null)  no title
+                        .withTitleColor("#FFFFFF")
+                        .withDividerColor("#11000000")
                         .withMessage(null)//.withMessage(null)  no Msg
-                        .withDialogColor(MainActivity.this.getResources().getColor(R.color.dialog_color))
+                        .withMessageColor("#FFFFFFFF")
+                        .withDialogColor(getResources().getColor(R.color.dialog_color))
                         .withEffect(Effectstype.Slidetop)       //def Effectstype.Slidetop
-                        .isCancelableOnTouchOutside(false)       //设为可以点击空白退出
-                        .setCustomView(etPrjName, MainActivity.this)
-                        .withDuration(200)
-                        .withButton1Text("确认")
-                        .withButton2Text("取消")
+                        .setCustomView(llPrjName, MainActivity.this)
+                        .withButton1Text("确认")                 //def gone
+                        .withButton2Text("取消")                 //def gone
+                        .isCancelableOnTouchOutside(false)
                         .setButton1Click(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 //TODO
                                 if (etPrjName.getText().toString().equals("")) {
-                                    Toast.makeText(MainActivity.this, "工程名不可为空", Toast.LENGTH_SHORT);
+                                    Toast.makeText(MainActivity.this, "工程名不可为空",
+                                            Toast.LENGTH_SHORT).show();
                                 } else {
                                     //TODO
                                     //新建工程---只用新建它的路径就行(注意是否工程名重复)
                                     File prjFile = new File(DbFileManager.DATABASE_PATH + etPrjName.getText());
                                     if (prjFile.exists()) {
-                                        Toast.makeText(MainActivity.this, "该工程已经存在!", Toast.LENGTH_SHORT);
+                                        Toast.makeText(MainActivity.this, "该工程已经存在!",
+                                                Toast.LENGTH_SHORT).show();
                                     } else {
                                         prjFile.mkdirs();
                                         //重新加载工程视图
@@ -139,8 +145,43 @@ public class MainActivity extends Activity {
                                 dialogBuilder.dismiss();
                             }
                         })
+                        .withDuration(400)
                         .show();
+
             }
         });
     }
+
+    /**
+     * 显示确认退出的Dialog
+     */
+    private void showExitDialog() {
+        final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(this);
+        dialogBuilder.withTitle("确认退出?")             //.withTitle(null)  no title
+                .withTitleColor("#FFFFFF")
+                .withDividerColor("#11000000")
+                .withMessage("退出将不会保存当前编辑的数据!")//.withMessage(null)  no Msg
+                .withMessageColor("#FFFFFFFF")
+                .withDialogColor(getResources().getColor(R.color.dialog_color))
+                .withEffect(Effectstype.Slidetop)       //def Effectstype.Slidetop
+                .withButton1Text("确认")                 //def gone
+                .withButton2Text("取消")                 //def gone
+                .isCancelableOnTouchOutside(false)
+                .setButton1Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogBuilder.dismiss();
+                        finish();
+                    }
+                })
+                .setButton2Click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogBuilder.dismiss();
+                    }
+                })
+                .withDuration(400)
+                .show();
+    }
+
 }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import dian.org.monitor.style.TransparentStyle;
 import dian.org.monitor.util.DialogManager;
 import dian.org.monitor.util.EditTextUtil;
 import dian.org.monitor.util.PictureManager;
+import dian.org.monitor.util.PictureShowAty;
 
 /**
  * 调用该Activity必须传递TourItem
@@ -52,6 +54,7 @@ public class SupportStructAty extends Activity {
     private EditText etSlipItem5;
     private EditText etPourItem6;
     private EditText etOtherItem7;
+
 
     private GridViewAdapter gridViewAdapter;
 
@@ -125,7 +128,7 @@ public class SupportStructAty extends Activity {
         etSlipItem5 = (EditText) findViewById(R.id.id_et_slip_item5);
         etPourItem6 = (EditText) findViewById(R.id.id_et_pour_item6);
         etOtherItem7 = (EditText) findViewById(R.id.id_et_other_item7);
-        if(tourItem!=null){
+        if (tourItem != null) {
             etQualityItem1.setText(tourItem.getSupportStruct().getQualityItem1());
             etCrackItem2.setText(tourItem.getSupportStruct().getCrackItem2());
             etTransformItem3.setText(tourItem.getSupportStruct().getTransformItem3());
@@ -137,9 +140,16 @@ public class SupportStructAty extends Activity {
 
         //照片选择的GridView
         gvPicture = (GridView) findViewById(R.id.id_gv_picture);
-        gridViewAdapter = new GridViewAdapter(this, tourItem, PictureManager.PICTURE_PATH_SUPPORT_STRUCT);
+        gridViewAdapter = new GridViewAdapter(this, tourItem,
+                PictureManager.PICTURE_PATH_SUPPORT_STRUCT);
         gvPicture.setAdapter(gridViewAdapter);
         gvPicture.setColumnWidth(GridViewAdapter.gridColumnWidth);
+        gvPicture.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
     }
 
     /**
@@ -157,8 +167,14 @@ public class SupportStructAty extends Activity {
                     @Override
                     public void onClick(View v) {
                         //在图库中查看图片
-                        PictureManager.viewPictureFromAlbum(SupportStructAty.this,
-                                gridViewAdapter.getBitmapItemList().get(position));
+//                        PictureManager.viewPictureFromAlbum(SupportStructAty.this,
+//                                gridViewAdapter.getBitmapItemList().get(position));
+                        if (position < gvPicture.getCount() - 1) {
+                            Intent intent = new Intent(getApplicationContext(), PictureShowAty.class);
+                            intent.putExtra("data",
+                                    gridViewAdapter.getBitmapItemList().get(position).getPath());
+                            startActivity(intent);
+                        }
                     }
                 });
                 //为图片删除设置监听事件

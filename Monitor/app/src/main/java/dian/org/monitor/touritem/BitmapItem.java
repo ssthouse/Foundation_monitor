@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
  * 存放一个bitmap和一个path的item
  * Created by ssthouse on 2015/6/12.
  */
-public class BitmapItem {
+public class BitmapItem{
 
     private Bitmap bitmap;
 
