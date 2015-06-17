@@ -33,5 +33,5 @@ dependencies {
     compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0@aar'
     compile files('libs/uk-co-senab-photoview-source.jar')
     compile files('libs/juhe_sdk_v_2_7.jar')
-    compile files('libs/baidumapapi_v3_4_0.jar')
+    compile files('libs/BaiduLBS_Android.jar')
 }

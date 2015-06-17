@@ -19,6 +19,7 @@ import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import java.io.File;
 
 import dian.org.monitor.db.DbFileManager;
+import dian.org.monitor.gps.GpsTestAty;
 import dian.org.monitor.style.TransparentStyle;
 
 /**
@@ -62,7 +63,7 @@ public class MainActivity extends Activity {
         initView();
 
         //TODO
-//        startActivity(new Intent(this, GpsTestAty.class));
+        startActivity(new Intent(this, GpsTestAty.class));
     }
 
     /**
