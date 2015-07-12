@@ -4,8 +4,8 @@
     android:layout_height="match_parent">
 
 
-    <ImageView
-        android:id="@+id/id_iv"
+    <SurfaceView
+        android:id="@+id/id_sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

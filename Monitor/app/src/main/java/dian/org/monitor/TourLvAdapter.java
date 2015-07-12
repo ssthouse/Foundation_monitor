@@ -64,7 +64,7 @@ public class TourLvAdapter extends BaseAdapter {
             viewHolder.tvNumber = (TextView) convertView.findViewById(R.id.id_tv_number);
             //填充数据
             viewHolder.tvNumber.setText(strTvNumber + dataList.get(position)
-                    .getTourInfo().getTourNumber());
+                    .getTourNumber());
             Calendar calendar = StringUtil.getCalendarFromTimeInMiles(dataList.get(position)
                     .getTourInfo().getTimeInMilesStr());
             String strDate = StringUtil.getFormatDate(calendar);
@@ -75,7 +75,7 @@ public class TourLvAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
             //填充数据
             viewHolder.tvNumber.setText(strTvNumber + dataList.get(position)
-                    .getTourInfo().getTourNumber());
+                    .getTourNumber());
             Calendar calendar = StringUtil.getCalendarFromTimeInMiles(
                     dataList.get(position).getTourInfo().getTimeInMilesStr());
             String strDate = StringUtil.getFormatDate(calendar);

@@ -3,7 +3,6 @@ package dian.org.monitor;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -12,8 +11,9 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-import dian.org.monitor.db.DbFileManager;
+import dian.org.monitor.util.DataBaseUtil;
 import dian.org.monitor.style.TransparentStyle;
+import dian.org.monitor.touritem.ProjectItem;
 import dian.org.monitor.touritem.TourInfo;
 import dian.org.monitor.touritem.TourItem;
 
@@ -86,15 +86,15 @@ public class TourListAty extends Activity {
 
         //主视图列表
         lv = (ListView) findViewById(R.id.id_lv_tour_item);
-        //TODO  获取tourList的数据---从数据库会哦去
-        lvAdapter = new TourLvAdapter(this, projectItem.getTourItemList());
+        //TODO 设置adapter
+        lvAdapter = new TourLvAdapter(this, DataBaseUtil.getTourItemList(projectItem));
         lv.setAdapter(lvAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(TourListAty.this, TourEditAty.class);
                 intent.putExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM,
-                        projectItem.getTourItemList().get(position));
+                        DataBaseUtil.getTourItemList(projectItem).get(position));
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
             }
         });
@@ -105,10 +105,14 @@ public class TourListAty extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TourListAty.this, TourEditAty.class);
-                TourItem tourItem = new TourItem(true);
-                tourItem.setTourInfo(new TourInfo(projectItem.getPrjName(),
-                        DbFileManager.getTourNumber(projectItem.getPrjName())+1,"",
-                        Calendar.getInstance().getTimeInMillis()+"", ""));
+                TourItem tourItem = new TourItem(projectItem.getPrjName(),
+                        DataBaseUtil.getNewTourNumber(projectItem),
+                        true);
+                //设置创建的时间---也就是唯一的标志
+                tourItem.setTourInfo(
+                        new TourInfo("",Calendar.getInstance().getTimeInMillis()+"", ""));
+                //这里需要将它保存进数据库----因为后面的TOurEditAty会从数据库获取他
+                DataBaseUtil.saveTourItemAll(tourItem);
                 intent.putExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM,tourItem);
                 startActivityForResult(intent, REQUEST_CODE_NEW);
             }
@@ -120,21 +124,16 @@ public class TourListAty extends Activity {
         //TODO----回调的处理
         switch (requestCode) {
             case REQUEST_CODE_EDIT:
-                //刷新prjItem数据
-                projectItem = new ProjectItem(projectItem.getPrjName());
                 //刷新listVierw的数据
-                lvAdapter = new TourLvAdapter(this, projectItem.getTourItemList());
+                lvAdapter = new TourLvAdapter(this, DataBaseUtil.getTourItemList(projectItem));
                 lv.setAdapter(lvAdapter);
                 break;
             case REQUEST_CODE_NEW:
-                //刷新prjItem数据
-                projectItem = new ProjectItem(projectItem.getPrjName());
                 //刷新listVierw的数据
-                lvAdapter = new TourLvAdapter(this, projectItem.getTourItemList());
+                lvAdapter = new TourLvAdapter(this, DataBaseUtil.getTourItemList(projectItem));
                 lv.setAdapter(lvAdapter);
                 break;
         }
-        Log.e(TAG, "我回调了----TourListAty的OnActitityResult方法");
         super.onActivityResult(requestCode, resultCode, data);
     }
 }

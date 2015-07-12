@@ -1,64 +1,55 @@
 package dian.org.monitor.touritem;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import java.io.Serializable;
+
+import dian.org.monitor.Constant;
 
 /**
  * 用于保存----工程名(不可修改)---巡检编号(INTEGER)----检测人(TEXT)---时间(TEXT)---总结(TEXT)
  * Created by ssthouse on 2015/6/14.
  */
-public class TourInfo implements Serializable{
+@Table(name= Constant.TABLE_NAME_TOUR_INFO)
+public class TourInfo extends Model implements Serializable{
 
-    /**
-     * 工程名
-     */
-    private String prjName;
-    /**
-     * 巡查编号
-     */
-    private int tourNumber;
     /**
      * 巡查人
      */
+    @Column(name = "observer")
     private String observer;
     /**
      * 时间字符串
      */
+    @Column(name = "timeInMilesStr")
     private String timeInMilesStr;
     /**
      * 总结
      */
+    @Column(name = "summary")
     private String summary;
 
     /**
      * 构造方法
-     * @param prjName
-     * @param tourNumber
      * @param observer
      * @param timeInMilesStr
      * @param summary
      */
-    public TourInfo(String prjName, int tourNumber, String observer,
+    public TourInfo(String observer,
                     String timeInMilesStr, String summary) {
-        this.prjName = prjName;
-        this.tourNumber = tourNumber;
+        super();
         this.observer = observer;
         this.timeInMilesStr = timeInMilesStr;
         this.summary = summary;
     }
 
+    public TourInfo(){
+        super();
+    }
+
     //getter---setter-------------------------------------------------------------------------------
-    public String getPrjName() {
-        return prjName;
-    }
-    public void setPrjName(String prjName) {
-        this.prjName = prjName;
-    }
-    public int getTourNumber() {
-        return tourNumber;
-    }
-    public void setTourNumber(int tourNumber) {
-        this.tourNumber = tourNumber;
-    }
     public String getObserver() {
         return observer;
     }

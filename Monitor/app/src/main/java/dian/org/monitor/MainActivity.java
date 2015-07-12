@@ -16,11 +16,9 @@ import android.widget.Toast;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
-import java.io.File;
-
-import dian.org.monitor.db.DbFileManager;
-import dian.org.monitor.gps.GpsTestAty;
 import dian.org.monitor.style.TransparentStyle;
+import dian.org.monitor.touritem.ProjectItem;
+import dian.org.monitor.util.DataBaseUtil;
 
 /**
  * 展示项目列表的主界面
@@ -53,17 +51,50 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //在使用SDK各组件之前初始化context信息，传入ApplicationContext
-        //注意该方法要再setContentView方法之前实现
-//        SDKInitializer.initialize(getApplicationContext());
+
+        //TODO---测试
+//        startActivity(new Intent(this, PhotoEditAty.class));
+
         setContentView(R.layout.main_aty);
         //透明顶栏
         TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
         //初始化View
         initView();
 
-        //TODO
-        startActivity(new Intent(this, GpsTestAty.class));
+
+        //TODO ---局和数据测试用
+//        WeatherState weatherState = new WeatherState("", "", "", "");
+//        JuheTest.getWatherData(this, weatherState);
+//        Log.e(TAG, weatherState.getTemperatureItem1()+weatherState.getWindSpeedItem3());
+
+        //TODO---ActivieAndroid测试用
+        //新建数据
+//        new ProjectItem("工程名").save();
+//
+//        TourItem tourItem = new TourItem("工程名", 3, false);
+//        tourItem.getTourInfo().save();
+//        tourItem.getWeatherState().save();
+//        tourItem.getSupportStruct().save();
+//        tourItem.getConstructState().save();
+//        tourItem.getSurroundEnv().save();
+//        tourItem.getMonitorFacility().save();
+//        tourItem.save();
+
+        //查询数据
+//        List<TourItem> items = new Select().from(TourItem.class)
+//                .where("Id=?", 4)
+//                .execute();
+//        Log.e(TAG, items.size()+"");
+//        Log.e(TAG, items.toString()+"");
+//        items.get(0).getTourInfo().setObserver("申诉铁岭");
+//        items.get(0).getTourInfo().save();
+
+//        ProjectItem prjItem = (ProjectItem) new Select().from(ProjectItem.class)
+//                .where("prjName=?", "工程名").execute().get(0);
+//        List<TourItem> itemList = prjItem.getTourItemList();
+//        Log.e(TAG, itemList.size()+"");
+//        Log.e(TAG, itemList.get(0).getTourNumber()+""
+//                +itemList.get(0).getWeatherState().getWindSpeedItem3());
     }
 
     /**
@@ -88,11 +119,11 @@ public class MainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //根据lvAdapter获取数据***传递给详细页面的
-                ProjectItem projectItem = lvAdapter.getDataList().get(position);
+                ProjectItem projectItem = lvAdapter.getProjectItemList().get(position);
                 Intent intent = new Intent(MainActivity.this, TourListAty.class);
                 intent.putExtra(Constant.INTENT_KEY_DATA_PROJECT_ITEM, projectItem);
                 //将ProjectItem传递给TourListAty
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
 
@@ -119,22 +150,20 @@ public class MainActivity extends Activity {
                         .setButton1Click(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //TODO
-                                if (etPrjName.getText().toString().equals("")) {
+                                String prjName = etPrjName.getText().toString();
+                                if (prjName.equals("")) {
                                     Toast.makeText(MainActivity.this, "工程名不可为空",
                                             Toast.LENGTH_SHORT).show();
                                 } else {
-                                    //TODO
-                                    //新建工程---只用新建它的路径就行(注意是否工程名重复)
-                                    File prjFile = new File(DbFileManager.DATABASE_PATH + etPrjName.getText());
-                                    if (prjFile.exists()) {
+                                    if (DataBaseUtil.isProjectExist(prjName)) {
                                         Toast.makeText(MainActivity.this, "该工程已经存在!",
                                                 Toast.LENGTH_SHORT).show();
                                     } else {
-                                        prjFile.mkdirs();
+                                        new ProjectItem(prjName).save();
                                         //重新加载工程视图
                                         lvAdapter = new MainLvAdapter(MainActivity.this);
                                         lv.setAdapter(lvAdapter);
+                                        //消除Dialog
                                         dialogBuilder.dismiss();
                                     }
                                 }
@@ -185,4 +214,13 @@ public class MainActivity extends Activity {
                 .show();
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        Log.e(TAG, "我回调了主界面");
+        //刷新主界面视图
+        lvAdapter = new MainLvAdapter(this);
+        lv.setAdapter(lvAdapter);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

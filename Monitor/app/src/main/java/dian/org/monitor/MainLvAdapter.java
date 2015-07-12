@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.io.File;
-import java.util.ArrayList;
+import com.activeandroid.query.Select;
+
 import java.util.List;
 
-import dian.org.monitor.db.DbFileManager;
+import dian.org.monitor.touritem.ProjectItem;
 import dian.org.monitor.util.PreferenceManager;
 
 /**
@@ -27,7 +27,7 @@ public class MainLvAdapter extends BaseAdapter {
     /**
      * 存储所有数据的List
      */
-    private List<ProjectItem> dataList;
+    private List<ProjectItem> projectItemList;
 
     /**
      * 构造方法
@@ -37,7 +37,13 @@ public class MainLvAdapter extends BaseAdapter {
     public MainLvAdapter(Context context) {
         this.mContext = context;
         //根据用户名***密码***获取他有的工程信息**然后展示出来
-        dataList = getPrjDataList();
+        projectItemList = getPrjDataList();
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        getPrjDataList();
+        super.notifyDataSetChanged();
     }
 
     /**
@@ -47,7 +53,7 @@ public class MainLvAdapter extends BaseAdapter {
      * @return
      */
     private List<ProjectItem> getPrjDataList() {
-        Log.e(TAG, "我开始获取----prj文件的列表");
+//        Log.e(TAG, "我开始获取----prj文件的列表");
         //获取用户名
         String userName = PreferenceManager.getSharedPerference(mContext).
                 getString(PreferenceManager.PREFERENCE_KEY_USER_NAME, null);
@@ -57,24 +63,9 @@ public class MainLvAdapter extends BaseAdapter {
             return null;
         }
 
-        //初始化数据
-        List<ProjectItem> list = new ArrayList<>();
-        //根据文件夹获取priName的列表
-        File prjDir = new File(DbFileManager.DATABASE_PATH);
-        if (!prjDir.exists()) {
-            prjDir.mkdirs();
-        }
-        String prjNames[] = prjDir.list();
-        if (prjNames == null) {
-            Log.e(TAG, "project的文件------没有");
-            return null;
-        } else {
-            Log.e(TAG, "project的文件------有"+prjNames.length);
-            for (String prjname : prjNames) {
-                list.add(new ProjectItem(prjname));
-            }
-            return list;
-        }
+        //初始化数据---从数据库
+        List<ProjectItem> list = new Select().from(ProjectItem.class).execute();
+        return list;
     }
 
     @Override
@@ -86,10 +77,10 @@ public class MainLvAdapter extends BaseAdapter {
             convertView.setTag(holer);
             holer.tvContent = (TextView) convertView.findViewById(R.id.id_tv_content);
             //设置tvContent为名称
-            holer.tvContent.setText(dataList.get(position).getPrjName());
+            holer.tvContent.setText(projectItemList.get(position).getPrjName());
         } else {
             holer = (ViewHoler) convertView.getTag();
-            holer.tvContent.setText(dataList.get(position).getPrjName());
+            holer.tvContent.setText(projectItemList.get(position).getPrjName());
         }
         return convertView;
     }
@@ -100,17 +91,17 @@ public class MainLvAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if (dataList == null) {
+        if (projectItemList == null) {
             return 0;
         }
-        return dataList.size();
+        return projectItemList.size();
     }
     @Override
     public Object getItem(int position) {
-        if (dataList == null) {
+        if (projectItemList == null) {
             return null;
         }
-        return dataList.get(position);
+        return projectItemList.get(position);
     }
 
     @Override
@@ -118,7 +109,7 @@ public class MainLvAdapter extends BaseAdapter {
         return position;
     }
 
-    public List<ProjectItem> getDataList() {
-        return dataList;
+    public List<ProjectItem> getProjectItemList() {
+        return projectItemList;
     }
 }

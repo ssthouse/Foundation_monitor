@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
@@ -41,6 +40,24 @@ public class PictureManager {
 
 
     /**
+     * 更改数据库的名称
+     *
+     * @param filePath
+     * @param formerName
+     * @param targetName
+     * @return
+     */
+    public static boolean changeFileName(String filePath, String formerName, String targetName) {
+        File file = new File(filePath + formerName);
+        if (!file.exists() || filePath == null || formerName == null || targetName == null) {
+            return false;
+        }
+        //给文件重命名
+        file.renameTo(new File(filePath + targetName));
+        return true;
+    }
+
+    /**
      * 将图片保存到指定的目录
      * @param photo
      * @param spath
@@ -69,8 +86,8 @@ public class PictureManager {
      */
     public static boolean saveImage(String srcPath, String targetPath) {
         //TODO
-        Log.e(TAG, "我是源文件" + srcPath);
-        Log.e(TAG, "我是目标文件" + targetPath);
+//        Log.e(TAG, "我是源文件" + srcPath);
+//        Log.e(TAG, "我是目标文件" + targetPath);
         //判断路径是否为空
         if (srcPath == null) {
             return false;
@@ -134,8 +151,8 @@ public class PictureManager {
         List<BitmapItem> bitmapList = new ArrayList<>();
         //列出picture文件
         File[] fileList;
-        File dir = new File(PICTURE_PATH + tourItem.getTourInfo().getPrjName() + "/" +
-                tourItem.getTourInfo().getTourNumber() + "/" + kindPath);
+        File dir = new File(PICTURE_PATH + tourItem.getPrjName() + "/" +
+                tourItem.getTourNumber() + "/" + kindPath);
         if (dir.exists()) {
             fileList = dir.listFiles();
         } else {
@@ -160,7 +177,7 @@ public class PictureManager {
      * @return
      */
     public static Bitmap getSmallBitmap(String imagePath, int width, int height) {
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         // 获取这个图片的宽和高，注意此处的bitmap为null
@@ -222,7 +239,7 @@ public class PictureManager {
         String state = Environment.getExternalStorageState();
         if (state.equals(Environment.MEDIA_MOUNTED)) {
             Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
-            activity.startActivityForResult(getImageByCamera, Constant.RESULT_CODE_CAMERA);
+            activity.startActivityForResult(getImageByCamera, Constant.REQUEST_CODE_CAMERA);
         } else {
             Toast.makeText(activity, "请确认已经插入SD卡", Toast.LENGTH_SHORT).show();
         }

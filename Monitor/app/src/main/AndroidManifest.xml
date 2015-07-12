@@ -26,12 +26,24 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
-        android:name=".util.MApplicatioin"
+        android:name=".MyApplicatioin"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:screenOrientation="portrait"
-        android:theme="@style/Theme.AppCompat.Light">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <!--ORM数据库框架-->
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="Monitor.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="dian.org.monitor.touritem.TourItem" />
+
 
         <!--聚合数据添加的内容-->
         <meta-data
@@ -46,9 +58,7 @@
         <!--登陆Aty-->
         <activity
             android:name=".login.LoginAty"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -59,60 +69,52 @@
         <activity
             android:name=".MainActivity"
             android:logo="@mipmap/ic_launcher"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:screenOrientation="portrait" />
 
         <!--设置Aty-->
         <activity
             android:name=".SettingAty"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:screenOrientation="portrait" />
 
         <!--巡视列表Aty-->
         <activity
             android:name=".TourListAty"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:screenOrientation="portrait" />
 
         <!--报表编辑Aty-->
         <activity
             android:name=".TourEditAty"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:screenOrientation="portrait"/>
 
         <!--WeatherState编辑Aty-->
         <activity
             android:name=".touritem.WeatherStateAty"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:screenOrientation="portrait" />
 
         <!--ConstructStateAty编辑Aty-->
         <activity
             android:name=".touritem.ConstructStateAty"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:screenOrientation="portrait" />
 
         <!--MonitorFacilityAty编辑Aty-->
         <activity
             android:name=".touritem.MonitorFacilityAty"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:screenOrientation="portrait" />
 
         <!--SupportStructAty编辑Aty-->
         <activity
             android:name=".touritem.SupportStructAty"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:screenOrientation="portrait"/>
 
         <!--SurroundEnvAty编辑Aty-->
         <activity
             android:name=".touritem.SurroundEnvAty"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" />
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".util.PictureShowAty" />
+        <activity android:name=".gps.GpsTestAty"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".gps.GpsTestAty"/>
+        <activity android:name=".test.PhotoEditAty"/>
     </application>
 
 </manifest>

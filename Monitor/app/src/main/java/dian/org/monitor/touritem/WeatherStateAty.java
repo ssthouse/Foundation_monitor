@@ -2,20 +2,36 @@ package dian.org.monitor.touritem;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
 import dian.org.monitor.Constant;
 import dian.org.monitor.R;
 import dian.org.monitor.style.TransparentStyle;
 import dian.org.monitor.util.EditTextUtil;
+import dian.org.monitor.util.NetWorkUtil;
 import dian.org.monitor.util.ToastUtil;
 
 /**
@@ -114,7 +130,7 @@ public class WeatherStateAty extends Activity {
             @Override
             public void onClick(View v) {
                 //TODO 根据当前网络数据----获取当前数据
-                //TODO 填充四项数据
+                smartFill();
             }
         });
     }
@@ -151,9 +167,103 @@ public class WeatherStateAty extends Activity {
                 .show();
     }
 
+    /**
+     * 智能填充
+     */
+    private void smartFill(){
+        //监测网络是否可用
+        if(!NetWorkUtil.isNetworkAvailable(this)){
+            Toast.makeText(this, "当前网络不可用", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //&lon=116.39277&lat=39.933748
+        //TODO 获取经纬度
+        float lon = 116.39277f;
+        float lat = 39.933748f;
+        //获取完整的请求字符串
+        String urlAll = "http://v.juhe.cn/weather/geo?format=2&key=2924914fd4108220c3470612914aa336" +
+                "&lon="+lon+"&lat="+lat;
+        String charSet = "UTF-8";
+        //开启任务线程
+        new AsyncTask<String, String, String>(){
+            @Override
+            protected String doInBackground(String... params) {
+                String result = getJsonString(params[0], params[1]);
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                try {
+                    //创建JSONBoject
+                    JSONObject jsonObject = new JSONObject(s);
+                    Log.e(TAG, jsonObject.toString());
+                    //获取result的Object
+                    JSONObject resultObject = (JSONObject)jsonObject.get("result");
+                    Log.e(TAG, resultObject.toString());
+                    JSONObject skObject = (JSONObject) resultObject.get("sk");
+                    //获取数据
+                    String temp = (String) skObject.get("temp");
+                    String wind = (String)skObject.get("wind_direction")+
+                            skObject.get("wind_strength");
+                    Log.e(TAG, "温度:"+temp+"风速"+wind);
+
+                    //创建返回数据
+                    weatherState.setTemperatureItem1(temp);
+                    weatherState.setWindSpeedItem3(wind);
+
+                    //更新界面
+                    etTemperature.setText(weatherState.getTemperatureItem1());
+                    etWindSpeed.setText(weatherState.getWindSpeedItem3());
+                    Toast.makeText(WeatherStateAty.this, "填充完成", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "something is wrong");
+                }
+            }
+        }.execute(urlAll, charSet);
+        Log.e(TAG, weatherState.getTemperatureItem1() + weatherState.getWindSpeedItem3());
+    }
+
+    /**
+     * @param urlAll:请求接口
+     * @param charset:字符编码
+     * @return 返回json结果
+     */
+    public static String getJsonString(String urlAll, String charset) {
+        BufferedReader reader = null;
+        String result = null;
+        StringBuffer sbf = new StringBuffer();
+        try {
+            URL url = new URL(urlAll);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setReadTimeout(30000);
+            connection.setConnectTimeout(30000);
+            connection.connect();
+            InputStream is = connection.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(
+                    is, charset));
+            String strRead = null;
+            while ((strRead = reader.readLine()) != null) {
+                sbf.append(strRead);
+            }
+            reader.close();
+            result = sbf.toString();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     @Override
     public void onBackPressed() {
         showExitDialog();
-        super.onBackPressed();
     }
 }

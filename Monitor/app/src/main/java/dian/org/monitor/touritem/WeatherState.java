@@ -1,36 +1,47 @@
 package dian.org.monitor.touritem;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import java.io.Serializable;
+
+import dian.org.monitor.Constant;
 
 /**
  * 自然条件的DataItem
  * Created by ssthouse on 2015/6/9.
  */
-public class WeatherState implements Serializable {
+@Table(name = Constant.TABLE_NAME_WEATHER_STATE)
+public class WeatherState extends Model implements Serializable {
 
     //气温***雨量***风速***水位
     /**
      * 气温
      * float
      */
+    @Column(name = "temperatureItem1")
     private String temperatureItem1;
 
     /**
      * 雨量
      * String
      */
+    @Column(name = "rainFallItem2")
     private String rainFallItem2;
 
     /**
      * 风级
      * String
      */
+    @Column(name = "windSpeedItem3")
     private String windSpeedItem3;
 
     /**
      * 水位
      * String
      */
+    @Column(name = "waterLevelItem4")
     private String waterLevelItem4;
 
     /**
@@ -42,12 +53,27 @@ public class WeatherState implements Serializable {
      * @param waterLevelItem4  水位
      */
     public WeatherState(String temperatureItem1, String rainFallItem2, String windSpeedItem3, String waterLevelItem4) {
+        super();
         this.temperatureItem1 = temperatureItem1;
         this.rainFallItem2 = rainFallItem2;
         this.windSpeedItem3 = windSpeedItem3;
         this.waterLevelItem4 = waterLevelItem4;
     }
 
+    public WeatherState(){
+        super();
+    }
+
+    /**
+     * 更新数据---单不是改变引用
+     * @param weatherState
+     */
+    public void updateData(WeatherState weatherState){
+        this.setTemperatureItem1(weatherState.getTemperatureItem1());
+        this.setRainFallItem2(weatherState.getRainFallItem2());
+        this.setWindSpeedItem3(weatherState.getWindSpeedItem3());
+        this.setWaterLevelItem4(weatherState.getWaterLevelItem4());
+    }
 
     public String getTemperatureItem1() {
         return temperatureItem1;

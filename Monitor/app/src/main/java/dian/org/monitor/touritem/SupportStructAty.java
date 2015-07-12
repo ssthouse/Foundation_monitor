@@ -21,10 +21,10 @@ import java.util.Calendar;
 import dian.org.monitor.Constant;
 import dian.org.monitor.R;
 import dian.org.monitor.style.TransparentStyle;
+import dian.org.monitor.test.PhotoEditAty;
 import dian.org.monitor.util.DialogManager;
 import dian.org.monitor.util.EditTextUtil;
 import dian.org.monitor.util.PictureManager;
-import dian.org.monitor.util.PictureShowAty;
 
 /**
  * 调用该Activity必须传递TourItem
@@ -66,8 +66,8 @@ public class SupportStructAty extends Activity {
         //初始化数据
         tourItem = (TourItem) getIntent().getSerializableExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM);
         //初始化当前Activity所在的项目的picture路径
-        picturePath = PictureManager.PICTURE_PATH + tourItem.getTourInfo().getPrjName() + "/" +
-                tourItem.getTourInfo().getTourNumber() + "/"
+        picturePath = PictureManager.PICTURE_PATH + tourItem.getPrjName() + "/" +
+                tourItem.getTourNumber() + "/"
                 + PictureManager.PICTURE_PATH_SUPPORT_STRUCT;
         //透明顶栏
         TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
@@ -166,15 +166,10 @@ public class SupportStructAty extends Activity {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //在图库中查看图片
-//                        PictureManager.viewPictureFromAlbum(SupportStructAty.this,
-//                                gridViewAdapter.getBitmapItemList().get(position));
-                        if (position < gvPicture.getCount() - 1) {
-                            Intent intent = new Intent(getApplicationContext(), PictureShowAty.class);
-                            intent.putExtra("data",
-                                    gridViewAdapter.getBitmapItemList().get(position).getPath());
-                            startActivity(intent);
-                        }
+                        Intent intent = new Intent(SupportStructAty.this, PhotoEditAty.class);
+                        String picPath = gridViewAdapter.getBitmapItemList().get(position).getPath();
+                        intent.putExtra("data", picPath);
+                        startActivityForResult(intent, Constant.REQUEST_CODE_EDIT_PICTURE);
                     }
                 });
                 //为图片删除设置监听事件
@@ -240,7 +235,7 @@ public class SupportStructAty extends Activity {
             gvPicture.setAdapter(gridViewAdapter);
             //改变焦点
             DialogManager.showInVisiableDialog(this);
-        } else if (requestCode == Constant.RESULT_CODE_CAMERA && null != data) {
+        } else if (requestCode == Constant.REQUEST_CODE_CAMERA && null != data) {
             Uri uri = data.getData();
             if (uri == null) {
                 Log.e(TAG, "拍照的uri是空的!!!");
@@ -281,6 +276,13 @@ public class SupportStructAty extends Activity {
                 //改变焦点
                 DialogManager.showInVisiableDialog(this);
             }
+        }else if (requestCode == Constant.REQUEST_CODE_EDIT_PICTURE) {
+            //更新界面
+            gridViewAdapter = new GridViewAdapter(this, tourItem,
+                    PictureManager.PICTURE_PATH_SUPPORT_STRUCT);
+            gvPicture.setAdapter(gridViewAdapter);
+            //改变焦点
+            DialogManager.showInVisiableDialog(this);
         }
     }
 }
