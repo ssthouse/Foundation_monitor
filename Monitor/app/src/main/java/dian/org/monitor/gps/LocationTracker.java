@@ -2,6 +2,10 @@ package dian.org.monitor.gps;
 
 import android.content.Context;
 
+import com.baidu.mapapi.map.BaiduMap;
+
+import dian.org.monitor.touritem.TourItem;
+
 /**
  * 这个是位置跟踪器类，是这个包的核心类。
  * 使用它能够利用{@link LocationMaker}定时记录下地理位置，地理位置的信息见{@link OneLocationRecord}.
@@ -10,7 +14,6 @@ import android.content.Context;
  * @author ChameleonChen
  */
 public class LocationTracker {
-
     /**
      * 单个的实例
      */
@@ -23,15 +26,15 @@ public class LocationTracker {
     /**
      * 记录时间的间隔
      */
-    private static int unitTrackingTime = 180000;
+    private static int unitTrackingTime = 5000;
     private LocationMaker mLocationMaker;
     private LocationDB mLocationDB;
-
+    private static String patrol_name;//传入工程的名字
     private LocationTracker(Context context) {
         //创建一个数据库用来存储---位置数据
         mLocationDB = LocationDB.getInstance(context);
         //创建一个locationMaker用来创建---位置数据
-        mLocationMaker = new LocationMaker(context, unitTrackingTime, new LocationMaker.LocationCreatedListener() {
+        mLocationMaker = new LocationMaker(context, unitTrackingTime, patrol_name, new LocationMaker.LocationCreatedListener() {
             @Override
             public void onCreated(OneLocationRecord record) {
                 onLocationCreated(record);
@@ -47,8 +50,9 @@ public class LocationTracker {
      *
      * @param context
      */
-    public static void createLocationTracker(Context context) {
+    public static void createLocationTracker(Context context,String name) {
         if (instance == null) {
+            patrol_name=name;
             instance = new LocationTracker(context);
         }
     }
@@ -59,6 +63,7 @@ public class LocationTracker {
      */
     public static void startWorking() {
         instance.start();
+
     }
 
     /**
@@ -66,9 +71,11 @@ public class LocationTracker {
      * 结束工作之后，如果想再次开启工作，需要调用{@link #createLocationTracker(Context)}
      */
     public static void stopWorking() {
-        instance.stop();
-        instance.release();
-        instance = null;
+        if(instance!=null) {
+            instance.stop();
+            instance.release();
+            instance = null;
+        }
     }
 
     ////////////////////////////////////////////////////////
@@ -109,4 +116,5 @@ public class LocationTracker {
     private void onLocationCreated(OneLocationRecord record) {
         mLocationDB.recordLocation(record);     // 将位置交给地图数据库处理
     }
+
 }

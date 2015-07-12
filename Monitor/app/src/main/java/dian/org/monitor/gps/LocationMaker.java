@@ -8,6 +8,8 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 
+import java.util.Date;
+
 /**
  * 这是位置生成器，能够在规定的时间间隔内生成地理位置信息
  * 调用其{@link #start()}能够开启定位，调用{@link #stop()}能够结束定位。
@@ -17,7 +19,7 @@ public class LocationMaker implements BDLocationListener {
     private static final String LOG_TAG = "LocationMaker";
 
     private LocationClient mLocationClient;
-
+    private String patrol_name;
     private Context context;
     /**
      * 生成位置的时间间隔,单位是 ms
@@ -32,13 +34,13 @@ public class LocationMaker implements BDLocationListener {
      * @param intervalTime 记录位置的时间间隔
      * @param listener     位置生成后的回调
      */
-    public LocationMaker(Context context, int intervalTime, LocationCreatedListener listener) {
+    public LocationMaker(Context context, int intervalTime, String patrol_name, LocationCreatedListener listener) {
         this.intervalTime = intervalTime;
         this.context = context;
+        this.patrol_name=patrol_name;
         if (listener == null)
             throw new NullPointerException();
         mLocationCreatedListener = listener;
-
     }
 
     /**
@@ -102,17 +104,21 @@ public class LocationMaker implements BDLocationListener {
                 || locType == BDLocation.TypeOffLineLocationNetworkFail
                 || locType == BDLocation.TypeServerError) {
             Log.e(LOG_TAG, "无效定位结果！");
+        }else {
+            OneLocationRecord record = new OneLocationRecord();
+            record.setLatitude(latitude);
+            record.setLongitude(longitude);
+            record.setTime(System.currentTimeMillis());
+            record.setPatrol_name(patrol_name);
+            Date date = new Date();
+            record.setDate(date);
+            //保存数据
+            makeOneLocationRecord(record);
+            Log.e(LOG_TAG, "经纬度");
+            Log.e(LOG_TAG, location.getLongitude() + "");
+            Log.e(LOG_TAG, location.getLatitude() + "");
+            Log.e(LOG_TAG, location.getLocType() + "");
         }
-        OneLocationRecord record = new OneLocationRecord();
-        record.setLatitude(latitude);
-        record.setLongitude(longitude);
-        record.setTime(System.currentTimeMillis());
-        //保存数据
-        makeOneLocationRecord(record);
-        Log.e(LOG_TAG, "经纬度");
-        Log.e(LOG_TAG, location.getLongitude()+"");
-        Log.e(LOG_TAG, location.getLatitude()+"");
-        Log.e(LOG_TAG, location.getLocType()+"");
     }
 
 
@@ -123,3 +129,4 @@ public class LocationMaker implements BDLocationListener {
         void onCreated(OneLocationRecord record);
     }
 }
+

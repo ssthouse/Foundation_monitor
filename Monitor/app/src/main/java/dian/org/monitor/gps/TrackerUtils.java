@@ -65,7 +65,7 @@ public class TrackerUtils {
             record.setTime(Long.parseLong(args[0]));
             record.setLongitude(Double.parseDouble(args[1]));
             record.setLatitude(Double.parseDouble(args[2]));
-            record.setAddrName(getAddressByPoint(Double.parseDouble(args[2]), Double.parseDouble(args[1])));
+            //record.setAddrName(getAddressByPoint(Double.parseDouble(args[2]), Double.parseDouble(args[1])));
             retArrayList.add(record);
         }
         return retArrayList;

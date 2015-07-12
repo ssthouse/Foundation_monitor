@@ -44,6 +44,9 @@ public class TourItem extends Model implements Serializable {
     @Column(name = "MonitorFacility")
     private MonitorFacility monitorFacility;
 
+    /**
+     * 这个方法一定要有
+     */
     public TourItem() {
         super();
     }

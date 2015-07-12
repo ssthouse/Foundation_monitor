@@ -3,16 +3,24 @@ package dian.org.monitor.gps;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +30,26 @@ import dian.org.monitor.R;
 /**
  * Created by ssthouse on 2015/6/16.
  */
+
+/**
+ * 尚需 不保存删除数据库
+ * 插标志
+ * 传工程名称
+ */
 public class GpsTestAty extends Activity {
     private static final String TAG = "gpsAty";
+    private String patrol_name="123";//传入巡检项目工程名，用于查询该工程的路径
+    private LatLng lastlines;
+    private boolean isFirstLoc = true;// 是否首次定位
+    private LocationClient mLocClient;
+    private InfoWindow mInfoWindow;
+    public MyLocationListenner myListener = new MyLocationListenner();
+    public MapView mMapView = null;
+    public BaiduMap mBaiduMap;
+    public BDLocation mylocation;
+    private static int  MIN_DISTANCE=10;
 
-    private MapView mMapView = null;
 
-    private BaiduMap mBaiduMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,66 +61,140 @@ public class GpsTestAty extends Activity {
         // 设置地图绘制每一帧时的回调接口
         mMapView = (MapView) findViewById(R.id.bmapView);
         mBaiduMap = mMapView.getMap();
-
         //稻草的记录方法
-        LocationTracker.createLocationTracker(this);
-        LocationTracker.startWorking();
-        HistoryLocationScanner historyLocationScanner =
+        final HistoryLocationScanner historyLocationScanner =
                 LocationTracker.getHistoryLocationScanner(this);
         List<OneLocationRecord> oneLocationRecordList =
-                historyLocationScanner.getLocationRecordData();
+                historyLocationScanner.getLocationRecordData(patrol_name);
 
         List<LatLng> latLngList = new ArrayList<>();
-        for(OneLocationRecord oneLocationRecord : oneLocationRecordList){
+        for (OneLocationRecord oneLocationRecord : oneLocationRecordList) {
             latLngList.add(new LatLng(oneLocationRecord.getLatitude(),
                     oneLocationRecord.getLongitude()));
         }
-        Log.e(TAG, latLngList.size()+"这是我的记录点的的数目");
-        drawLines(latLngList);
+        Log.e(TAG, latLngList.size() + "这是我的记录点的的数目");
+        for(int i = 0;i < latLngList.size(); i ++) {
+            Log.i(TAG, "经度:" + latLngList.get(i).longitude);
+            Log.i(TAG, "纬度:" + latLngList.get(i).latitude);
+            Drawlines(latLngList.get(i));
+        }
+
+        // 开启定位图层
+        mBaiduMap.setMyLocationEnabled(true);
+        // 定位初始化
+        mLocClient = new LocationClient(this);
+        mLocClient.registerLocationListener(myListener);
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true);// 打开gps
+        option.setCoorType("bd09ll"); // 设置坐标类型
+        option.setScanSpan(5000);
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        mLocClient.setLocOption(option);
+        mLocClient.start();
+        Log.i(TAG, "定位初始化");
     }
 
+    /**
+     * 设置起点标志
+     * @param lines
+     */
+    private void initOverlay(LatLng lines){
+        MyOverlay myOverlay=new MyOverlay(this,mBaiduMap,lines.longitude,lines.latitude);
+        myOverlay.showView();
+        LatLng ll =myOverlay.mMarker.getPosition();
+        Button button = new Button(getApplicationContext());
+        button.setBackgroundResource(R.drawable.popup);
+        button.setText("起点");
+        InfoWindow mInfoWindow;
+        mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(button), ll, -47, null);
+        mBaiduMap.showInfoWindow(mInfoWindow);
+    }
 
-     private void drawLines(List<LatLng> latLngList){
-         //定义多边形的五个顶点
-         LatLng pt1 = new LatLng(30.53923, 114.457428);
-         LatLng pt2 = new LatLng(30.63923, 114.657428);
-         LatLng pt3 = new LatLng(30.83923, 114.757428);
-         LatLng pt4 = new LatLng(30.93923, 114.357428);
-         LatLng pt5 = new LatLng(30.43923, 114.457428);
-         List<LatLng> pts = new ArrayList<>();
-         pts.add(pt1);
-         pts.add(pt2);
-         pts.add(pt3);
-         pts.add(pt4);
-         pts.add(pt5);
-         OverlayOptions polyLineOption = new PolylineOptions()
-                 .color(getResources().getColor(R.color.blue_level0))
-                 .points(latLngList);
-         mBaiduMap.addOverlay(polyLineOption);
+    /**
+     * 路径绘制
+     * @param lines
+     */
+    private void Drawlines(LatLng lines){
+        if(lastlines==null){//初始化起点
+            lastlines=lines;
+            initOverlay(lines);
+        }
+        else{
+            List<LatLng> points = new ArrayList<LatLng>();
+            points.add(lastlines);
+            points.add(lines);
+            OverlayOptions ooPolyline = new PolylineOptions().width(10)
+                    .color(0xAAFF0000).points(points);
+            mBaiduMap.addOverlay(ooPolyline);
+            lastlines=lines;
+        }
+    }
 
-         //构造当前的第一个点
-         MapStatus mMapStatus = new MapStatus.Builder()
-                 .target(latLngList.get(0))
-                 .zoom(15)
-                 .build();
-         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
-         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-         //改变地图状态
-         //定位到当前的第一个点
-         mBaiduMap.animateMapStatus(mMapStatusUpdate);
-     }
+    /**
+     * 定位SDK监听函数
+     */
+    public class MyLocationListenner implements BDLocationListener {
 
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            mylocation=location;
+            // map view 销毁后不在处理新接收的位置
+            if (location == null || mMapView == null)
+                return;
+            MyLocationData locData = new MyLocationData.Builder()
+                    .accuracy(location.getRadius())
+                            // 此处设置开发者获取到的方向信息，顺时针0-360
+                    .direction(100).latitude(location.getLatitude())
+                    .longitude(location.getLongitude()).build();
+            Log.i(TAG,"我更新了位置");
+            mBaiduMap.setMyLocationData(locData);
+            if(lastlines!=null) {
+                if (Distance(lastlines.longitude, lastlines.latitude,
+                        location.getLongitude(), location.getLatitude())
+                        > MIN_DISTANCE)
+                    Drawlines(new LatLng(location.getLatitude(), location.getLongitude()));
+            }else{
+                lastlines=new LatLng(location.getLatitude(), location.getLongitude());
+            }
+            if (isFirstLoc) {
+                isFirstLoc = false;
+                LatLng ll = new LatLng(location.getLatitude(),
+                        location.getLongitude());
+                MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
+                mBaiduMap.animateMapStatus(u);
+            }
+        }
+    }
+
+    /**
+     * 调用百度API计算两点间距离
+     * @param longitude
+     * @param latitude
+     * @param nextlongitude
+     * @param nextlatitude
+     * @return
+     */
+    private double Distance(double longitude, double latitude,double nextlongitude, double nextlatitude){
+        double distance= DistanceUtil.getDistance(new LatLng(latitude, longitude), new LatLng(nextlatitude, nextlongitude));
+        return distance;
+    }
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
+        // 退出时销毁定位
+        mLocClient.stop();
+        // 关闭定位图层
+        mBaiduMap.setMyLocationEnabled(false);
         mMapView.onDestroy();
+        mMapView = null;
+        super.onDestroy();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理        mMapView.onResume();
+        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+        mMapView.onResume();
     }
 
     @Override

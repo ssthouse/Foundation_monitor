@@ -29,7 +29,6 @@ public class HistoryLocationScanner {
 
     public HistoryLocationScanner(Context context) {
         db = LocationDB.getInstance(context);
-        today();
     }
 
     /**
@@ -38,17 +37,17 @@ public class HistoryLocationScanner {
      *
      * @param date 将当前数
      */
-    public void setDate(long date) {
+    /*public void setDate(long date) {
         this.date = getStartTime(date);
         isDateSet = true;
-    }
+    }*/
 
     /**
      * 前一天
      *
      * @return 没有调用{@link #setDate}就返回false
      */
-    public boolean nextDay() {
+    /*public boolean nextDay() {
         if (!isDateSet) {
             return false;
         } else {
@@ -67,14 +66,14 @@ public class HistoryLocationScanner {
             date -= ONE_DAY_TIME;
             return false;
         }
-    }
+    }*/
 
     /**
      * 前一天
      *
      * @return 没有调用{@link #setDate}就返回false
      */
-    public boolean previousDay() {
+    /*public boolean previousDay() {
         if (!isDateSet) {
             return false;
         } else {
@@ -95,25 +94,25 @@ public class HistoryLocationScanner {
             date += ONE_DAY_TIME;
             return false;
         }
-    }
+    }*/
 
     /**
      * 今天
      *
      * @return
      */
-    public boolean today() {
+    /*public boolean today() {
         setDate(System.currentTimeMillis());
         return db.isHaveDataInADay(date);
-    }
+    }*/
 
     /**
      * 返回当前日期的数据
      *
      * @return
      */
-    public ArrayList<OneLocationRecord> getLocationRecordData() {
-        return db.getLocationsInADay(date);
+    public ArrayList<OneLocationRecord> getLocationRecordData(String patrol_name) {
+        return db.getLocationsInaProject(patrol_name);
     }
 
     /**
@@ -121,17 +120,17 @@ public class HistoryLocationScanner {
      *
      * @return
      */
-    public long getTimeOfFirstPoint() {
+    /*public long getTimeOfFirstPoint() {
         return db.getTimeOfFirstPoint();
     }
-
+*/
     /**
      * 获取某一天的开始时间
      *
      * @param time 时间戳
      * @return
      */
-    private long getStartTime(long time) {
+    /*private long getStartTime(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(time);
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -139,26 +138,26 @@ public class HistoryLocationScanner {
         long startTime = 0;
         try {
             startTime = sdf2.parse(date).getTime();
+            Log.i(LOG_TAG,""+startTime);
         } catch (ParseException e) {
             Log.e(LOG_TAG, "日期格式有问题");
             e.printStackTrace();
         }
         return startTime;
-    }
+    }*/
 
-    public void setOnDataChangedListener(OnDataChangedListener listener) {
+    /*public void setOnDataChangedListener(OnDataChangedListener listener) {
         db.addOnDataChangedListener(listener);
-    }
+    }*/
 
     /**
      * 这个监听器负责监听{@link LocationDB}里面的数据是否发生了变化。
      * 数据变化的接口
      */
-    public interface OnDataChangedListener {
-        /**
+    /*public interface OnDataChangedListener {
+        *//**
          * 如果数据变化，则执行此回调
-         */
+         *//*
         public void onDataChanged();
-    }
-
+    }*/
 }

@@ -11,11 +11,12 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-import dian.org.monitor.util.DataBaseUtil;
+import dian.org.monitor.gps.LocationTracker;
 import dian.org.monitor.style.TransparentStyle;
 import dian.org.monitor.touritem.ProjectItem;
 import dian.org.monitor.touritem.TourInfo;
 import dian.org.monitor.touritem.TourItem;
+import dian.org.monitor.util.DataBaseUtil;
 
 /**
  * Created by ssthouse on 2015/6/10.
@@ -104,16 +105,18 @@ public class TourListAty extends Activity {
         tvNewTour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LocationTracker.createLocationTracker(TourListAty.this, "123");
+                LocationTracker.startWorking();
                 Intent intent = new Intent(TourListAty.this, TourEditAty.class);
                 TourItem tourItem = new TourItem(projectItem.getPrjName(),
                         DataBaseUtil.getNewTourNumber(projectItem),
                         true);
                 //设置创建的时间---也就是唯一的标志
                 tourItem.setTourInfo(
-                        new TourInfo("",Calendar.getInstance().getTimeInMillis()+"", ""));
+                        new TourInfo("", Calendar.getInstance().getTimeInMillis() + "", ""));
                 //这里需要将它保存进数据库----因为后面的TOurEditAty会从数据库获取他
                 DataBaseUtil.saveTourItemAll(tourItem);
-                intent.putExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM,tourItem);
+                intent.putExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM, tourItem);
                 startActivityForResult(intent, REQUEST_CODE_NEW);
             }
         });

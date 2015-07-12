@@ -1,12 +1,10 @@
 package dian.org.monitor.util;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -60,13 +58,13 @@ public class PictureManager {
     /**
      * 将图片保存到指定的目录
      * @param photo
-     * @param spath
+     * @param savePath
      * @return
      */
-    public static boolean saveImage(Bitmap photo, String spath) {
+    public static boolean saveImage(Bitmap photo, String savePath) {
         try {
             BufferedOutputStream bos = new BufferedOutputStream(
-                    new FileOutputStream(spath, false));
+                    new FileOutputStream(savePath, false));
             photo.compress(Bitmap.CompressFormat.JPEG, 100, bos);
             bos.flush();
             bos.close();
@@ -89,7 +87,7 @@ public class PictureManager {
 //        Log.e(TAG, "我是源文件" + srcPath);
 //        Log.e(TAG, "我是目标文件" + targetPath);
         //判断路径是否为空
-        if (srcPath == null) {
+        if (srcPath == null || targetPath == null) {
             return false;
         }
         try {
@@ -108,15 +106,15 @@ public class PictureManager {
             targetFile.setWritable(true);
             targetFile.setExecutable(true);
             //复制文件
-            FileInputStream fosfrom = new java.io.FileInputStream(srcFile);
-            FileOutputStream fosto = new FileOutputStream(targetFile);
+            FileInputStream fosFrom = new java.io.FileInputStream(srcFile);
+            FileOutputStream fosTo = new FileOutputStream(targetFile);
             byte bt[] = new byte[1024];
             int c;
-            while ((c = fosfrom.read(bt)) > 0) {
-                fosto.write(bt, 0, c); //将内容写到新文件当中
+            while ((c = fosFrom.read(bt)) > 0) {
+                fosTo.write(bt, 0, c); //将内容写到新文件当中
             }
-            fosfrom.close();
-            fosto.close();
+            fosFrom.close();
+            fosTo.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -140,6 +138,36 @@ public class PictureManager {
     }
 
     /**
+     * 按从小到大的顺序排列File数组
+     * @param files
+     */
+    private static void sortFileArray(File[] files){
+        for(int i=0; i<files.length-1; i++){
+            if(getFileNameInFloat(files[i]) > getFileNameInFloat(files[i+1])){
+                File tempFile = files[i];
+                files[i] = files[i+1];
+                files[i+1] = tempFile;
+            }
+        }
+    }
+
+    /**
+     * 获取图片文件的float文件名----用于比较创建时间
+     * @param file
+     */
+    private static float getFileNameInFloat(File file){
+        try {
+            String fileName = file.getName();
+            String floatString = fileName.split(".")[0];
+            float time = Float.parseFloat(floatString);
+            return time;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
      * 根据给定的TourItem---获取图片文件---获取bitmap的List
      *
      * @param tourItem
@@ -150,17 +178,19 @@ public class PictureManager {
         //要返回的数据
         List<BitmapItem> bitmapList = new ArrayList<>();
         //列出picture文件
-        File[] fileList;
+        File[] files;
         File dir = new File(PICTURE_PATH + tourItem.getPrjName() + "/" +
                 tourItem.getTourNumber() + "/" + kindPath);
         if (dir.exists()) {
-            fileList = dir.listFiles();
+            files = dir.listFiles();
         } else {
             dir.mkdirs();
-            fileList = dir.listFiles();
+            files = dir.listFiles();
         }
+        //整理顺序
+        sortFileArray(files);
         //将每个文件转化为bitmap
-        for (File file : fileList) {
+        for (File file : files) {
             //获取缩略图
             Bitmap bitmap = getSmallBitmap(file.getAbsolutePath(), 70, 70);
             bitmapList.add(new BitmapItem(bitmap, file.getAbsolutePath()));
@@ -204,19 +234,6 @@ public class PictureManager {
         bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
                 ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
         return bitmap;
-    }
-
-    /**
-     * 在图库中查看picture
-     * @param context
-     * @param bitmapItem
-     */
-    public static void viewPictureFromAlbum(Context context, BitmapItem bitmapItem) {
-        //使用Intent
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        //Uri mUri = Uri.parse("file://" + picFile.getPath());Android3.0以后最好不要通过该方法，存在一些小Bug
-        intent.setDataAndType(Uri.fromFile(new File(bitmapItem.getPath())), "image/*");
-        context.startActivity(intent);
     }
 
     /**

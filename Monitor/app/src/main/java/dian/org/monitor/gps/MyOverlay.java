@@ -21,9 +21,9 @@ import dian.org.monitor.R;
 
 public class MyOverlay {
     BaiduMap mBaiduMap;
-    private Marker mMarker;
+    Marker mMarker;
     BitmapDescriptor bdA = BitmapDescriptorFactory
-            .fromResource(R.drawable.back);
+            .fromResource(R.drawable.icon_gcoding);
     double latitude;
     double longtitude;
     LatLng lastLatLng;//记录上一次的地理
@@ -40,7 +40,7 @@ public class MyOverlay {
      * @param latitude
      * @param longitude
      */
-    public MyOverlay(Context context, BaiduMap mBaiduMap, double latitude, double longitude) {
+    public MyOverlay(Context context, BaiduMap mBaiduMap, double longitude, double latitude) {
         this.context = context;
         this.mBaiduMap = mBaiduMap;
         //存储地理位置

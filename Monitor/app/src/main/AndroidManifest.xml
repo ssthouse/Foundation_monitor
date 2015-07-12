@@ -84,7 +84,7 @@
         <!--报表编辑Aty-->
         <activity
             android:name=".TourEditAty"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!--WeatherState编辑Aty-->
         <activity
@@ -104,17 +104,24 @@
         <!--SupportStructAty编辑Aty-->
         <activity
             android:name=".touritem.SupportStructAty"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <!--SurroundEnvAty编辑Aty-->
         <activity
             android:name=".touritem.SurroundEnvAty"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".gps.GpsTestAty"
+        <activity
+            android:name=".gps.GpsTestAty"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".test.PhotoEditAty"/>
+        <activity android:name=".test.PhotoEditAty" />
+
+        <!--定位相关-->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"/>
     </application>
 
 </manifest>

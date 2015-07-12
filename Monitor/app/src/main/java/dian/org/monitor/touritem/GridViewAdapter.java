@@ -46,13 +46,13 @@ public class GridViewAdapter extends BaseAdapter {
      *
      * @param context
      * @param tourItem
-     * @param kindpath 想要打开的类型文件的路径
+     * @param picPath 想要打开的类型文件的路径
      */
-    public GridViewAdapter(Context context, TourItem tourItem, String kindpath) {
+    public GridViewAdapter(Context context, TourItem tourItem, String picPath) {
         this.context = context;
         this.tourItem = tourItem;
         //初始化数据---根据TOurItem获取List<Drawable>
-        bitmapItemList = PictureManager.getBitmapList(tourItem, kindpath);
+        bitmapItemList = PictureManager.getBitmapList(tourItem, picPath);
         gridColumnWidth = (ScreenUtil.getScreenWidth(context)-(girdViewColumnPadding *2)-20)/3;
         picWidth = gridColumnWidth;
     }

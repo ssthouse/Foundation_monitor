@@ -17,7 +17,8 @@ import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
 import java.util.Calendar;
 
-import dian.org.monitor.util.DataBaseUtil;
+import dian.org.monitor.gps.GpsTestAty;
+import dian.org.monitor.gps.LocationTracker;
 import dian.org.monitor.style.TransparentStyle;
 import dian.org.monitor.touritem.ConstructStateAty;
 import dian.org.monitor.touritem.MonitorFacilityAty;
@@ -26,6 +27,7 @@ import dian.org.monitor.touritem.SurroundEnvAty;
 import dian.org.monitor.touritem.TourItem;
 import dian.org.monitor.touritem.WeatherState;
 import dian.org.monitor.touritem.WeatherStateAty;
+import dian.org.monitor.util.DataBaseUtil;
 import dian.org.monitor.util.PictureManager;
 import dian.org.monitor.util.StringUtil;
 import dian.org.monitor.util.ToastUtil;
@@ -253,19 +255,21 @@ public class TourEditAty extends Activity {
             public void onClick(View v) {
                 //TODO
                 //如果有数据---打开Activity---显示GPS数据
-
+                Intent intent = new Intent(TourEditAty.this, GpsTestAty.class);
+                intent.putExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM, tourItem);
+                startActivityForResult(intent, REQUEST_CODE_MONITOR_FACILITY);
                 //否则---显示Dialog---没有数据
-                NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(TourEditAty.this);
-                dialogBuilder.withTitle("提醒")             //.withTitle(null)  no title
-                        .withTitleColor("#FFFFFF")
-                        .withDividerColor("#11000000")
-                        .withMessage("该次巡查没记录GPS数据")//.withMessage(null)  no Msg
-                        .withMessageColor("#FFFFFFFF")
-                        .withDialogColor(getResources().getColor(R.color.dialog_color))
-                        .withEffect(Effectstype.Slidetop)       //def Effectstype.Slidetop
-                        .isCancelableOnTouchOutside(true)
-                        .withDuration(400)
-                        .show();
+//                NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(TourEditAty.this);
+//                dialogBuilder.withTitle("提醒")             //.withTitle(null)  no title
+//                        .withTitleColor("#FFFFFF")
+//                        .withDividerColor("#11000000")
+//                        .withMessage("该次巡查没记录GPS数据")//.withMessage(null)  no Msg
+//                        .withMessageColor("#FFFFFFFF")
+//                        .withDialogColor(getResources().getColor(R.color.dialog_color))
+//                        .withEffect(Effectstype.Slidetop)       //def Effectstype.Slidetop
+//                        .isCancelableOnTouchOutside(true)
+//                        .withDuration(400)
+//                        .show();
             }
         });
     }
@@ -535,5 +539,12 @@ public class TourEditAty extends Activity {
         //初始化dialogBuilder界面
         CalendarView calendarView = (CalendarView) dialogBuilder.findViewById(R.id.id_cv_date_picker);
         calendarView.setDate(Long.parseLong(tourItem.getTourInfo().getTimeInMilesStr()));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
+        LocationTracker.stopWorking();
     }
 }
