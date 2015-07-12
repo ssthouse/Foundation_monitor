@@ -20,7 +20,7 @@
             android:layout_height="@dimen/actionbar_icon_height"
             android:layout_gravity="center_vertical"
             android:scaleType="centerInside"
-            android:src="@drawable/back" />
+            android:src="@drawable/ic_action_back" />
 
         <TextView
             android:layout_width="0dp"
