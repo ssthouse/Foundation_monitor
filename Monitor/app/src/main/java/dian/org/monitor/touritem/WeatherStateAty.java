@@ -222,7 +222,7 @@ public class WeatherStateAty extends Activity {
                 }
             }
         }.execute(urlAll, charSet);
-//        Log.e(TAG, weatherState.getTemperatureItem1() + weatherState.getWindSpeedItem3());
+        Log.e(TAG, weatherState.getTemperatureItem1() + weatherState.getWindSpeedItem3());
     }
 
     /**
