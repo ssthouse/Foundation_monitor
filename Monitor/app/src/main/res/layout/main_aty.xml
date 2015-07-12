@@ -20,7 +20,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/ic_action_web_site" />
 
         <TextView
             android:id="@+id/id_ab_tv"
@@ -40,7 +40,7 @@
             android:layout_gravity="center_vertical"
             android:background="@drawable/click_selector"
             android:scaleType="centerInside"
-            android:src="@drawable/set" />
+            android:src="@drawable/ic_action_overflow" />
     </LinearLayout>
 
     <!--下面的列表部分-->

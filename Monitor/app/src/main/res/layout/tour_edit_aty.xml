@@ -22,7 +22,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:scaleType="centerInside"
-            android:src="@drawable/back" />
+            android:src="@drawable/ic_action_back" />
 
         <TextView
             android:id="@+id/id_tv_ab_prjName"
