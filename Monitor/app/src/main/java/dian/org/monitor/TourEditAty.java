@@ -31,6 +31,7 @@ import dian.org.monitor.util.DataBaseUtil;
 import dian.org.monitor.util.PictureManager;
 import dian.org.monitor.util.StringUtil;
 import dian.org.monitor.util.ToastUtil;
+import dian.org.monitor.util.WordGenereteUtil;
 
 /**
  * Created by ssthouse on 2015/6/10.
@@ -74,6 +75,8 @@ public class TourEditAty extends Activity {
 
     private TextView tvGps;
 
+    private LinearLayout llShare;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +86,8 @@ public class TourEditAty extends Activity {
         //获取TourItem数据
         Intent intent = getIntent();
         tourItem = (TourItem) intent.getSerializableExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM);
+        Log.e(TAG, tourItem.getPrjName()+":"+ tourItem.getTourNumber());
+        //如果是新建的TourItem----应该是从数据库获取数据
         tourItem = DataBaseUtil.getTourItemInDB(tourItem);
         initView();
     }
@@ -272,6 +277,15 @@ public class TourEditAty extends Activity {
 //                        .show();
             }
         });
+
+        llShare = (LinearLayout) findViewById(R.id.id_ll_share);
+        llShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WordGenereteUtil.generateWordFile(TourEditAty.this, tourItem);
+                //TODO ----分享
+            }
+        });
     }
 
     @Override
@@ -372,6 +386,11 @@ public class TourEditAty extends Activity {
                     @Override
                     public void onClick(View v) {
                         dialogBuilder.dismiss();
+                        //如果是新建的---且没有保存--直接删除
+                        if (getIntent().getIntExtra(Constant.INTENT_KEY_REQUEST_CODE, 0) ==
+                                TourListAty.REQUEST_CODE_NEW) {
+                            DataBaseUtil.deleteTourItemAll(tourItem);
+                        }
                         finish();
                     }
                 })

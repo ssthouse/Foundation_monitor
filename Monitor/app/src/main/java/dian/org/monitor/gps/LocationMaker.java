@@ -102,7 +102,8 @@ public class LocationMaker implements BDLocationListener {
                 || locType == BDLocation.TypeOffLineLocation
                 || locType == BDLocation.TypeOffLineLocationFail
                 || locType == BDLocation.TypeOffLineLocationNetworkFail
-                || locType == BDLocation.TypeServerError) {
+                || locType == BDLocation.TypeServerError
+                || locType == BDLocation.TypeCriteriaException) {
             Log.e(LOG_TAG, "无效定位结果！");
         }else {
             OneLocationRecord record = new OneLocationRecord();

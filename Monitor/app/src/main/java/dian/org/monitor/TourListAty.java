@@ -26,9 +26,9 @@ public class TourListAty extends Activity {
     private static final String TAG = "TourListAty";
 
     //
-    private final int REQUEST_CODE_EDIT = 1001;
+    public static final int REQUEST_CODE_EDIT = 1001;
 
-    private final int REQUEST_CODE_NEW = 1002;
+    public static final int REQUEST_CODE_NEW = 1002;
 
     /**
      * 所有的数据
@@ -105,8 +105,6 @@ public class TourListAty extends Activity {
         tvNewTour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocationTracker.createLocationTracker(TourListAty.this, "123");
-                LocationTracker.startWorking();
                 Intent intent = new Intent(TourListAty.this, TourEditAty.class);
                 TourItem tourItem = new TourItem(projectItem.getPrjName(),
                         DataBaseUtil.getNewTourNumber(projectItem),
@@ -114,9 +112,15 @@ public class TourListAty extends Activity {
                 //设置创建的时间---也就是唯一的标志
                 tourItem.setTourInfo(
                         new TourInfo("", Calendar.getInstance().getTimeInMillis() + "", ""));
-                //这里需要将它保存进数据库----因为后面的TOurEditAty会从数据库获取他
+                //这里需要将它保存进数据库----因为后面的TourEditAty会从数据库获取他
                 DataBaseUtil.saveTourItemAll(tourItem);
+
+                //开始GPS巡查
+                LocationTracker.createLocationTracker(TourListAty.this, "123");
+                LocationTracker.startWorking();
+
                 intent.putExtra(Constant.INTENT_KEY_DATA_TOUR_ITEM, tourItem);
+                intent.putExtra(Constant.INTENT_KEY_REQUEST_CODE, REQUEST_CODE_NEW);
                 startActivityForResult(intent, REQUEST_CODE_NEW);
             }
         });

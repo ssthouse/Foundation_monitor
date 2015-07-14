@@ -45,4 +45,7 @@ public class Constant {
     //保存还是取消
     public static final int RESULT_CODE_SAVE = 20001;
     public static final int RESULT_CODE_CANCEL = 20002;
+
+
+    public static final String  INTENT_KEY_REQUEST_CODE = "requestCode";
 }

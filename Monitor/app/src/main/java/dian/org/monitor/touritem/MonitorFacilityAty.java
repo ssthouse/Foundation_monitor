@@ -175,13 +175,7 @@ public class MonitorFacilityAty extends Activity {
         super.onWindowFocusChanged(hasFocus);
     }
 
-    /**
-     * 获取照片的回调方法
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //判断是图库---还是照相机

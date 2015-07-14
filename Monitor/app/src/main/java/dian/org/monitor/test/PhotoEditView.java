@@ -267,11 +267,11 @@ public class PhotoEditView extends SurfaceView implements View.OnTouchListener,
      */
     public void saveBitmap(){
         if(bitmap.getWidth()*bitmap.getHeight()>3000000){
-            Log.e(TAG, "i save the small bitmap");
-//            saveSmallBitmap();
+//            Log.e(TAG, "i save the small bitmap");
+            saveSmallBitmap();
         }else{
-            Log.e(TAG, "i save the big bitmap ");
-//            saveBigBitmap();
+//            Log.e(TAG, "i save the big bitmap ");
+            saveBigBitmap();
         }
     }
 
@@ -334,6 +334,7 @@ public class PhotoEditView extends SurfaceView implements View.OnTouchListener,
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.e(TAG, "something is wrong");
             }
             return null;
         }

@@ -53,48 +53,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         //TODO---测试
-//        startActivity(new Intent(this, PhotoEditAty.class));
+//        WordGenereteUtil.generateWordFile(this, new TourItem("纳入高考比我家来人啊人", 6, false));
 
         setContentView(R.layout.main_aty);
         //透明顶栏
         TransparentStyle.setAppToTransparentStyle(this, getResources().getColor(R.color.blue_level0));
         //初始化View
         initView();
-
-
-        //TODO ---局和数据测试用
-//        WeatherState weatherState = new WeatherState("", "", "", "");
-//        JuheTest.getWatherData(this, weatherState);
-//        Log.e(TAG, weatherState.getTemperatureItem1()+weatherState.getWindSpeedItem3());
-
-        //TODO---ActivieAndroid测试用
-        //新建数据
-//        new ProjectItem("工程名").save();
-//
-//        TourItem tourItem = new TourItem("工程名", 3, false);
-//        tourItem.getTourInfo().save();
-//        tourItem.getWeatherState().save();
-//        tourItem.getSupportStruct().save();
-//        tourItem.getConstructState().save();
-//        tourItem.getSurroundEnv().save();
-//        tourItem.getMonitorFacility().save();
-//        tourItem.save();
-
-        //查询数据
-//        List<TourItem> items = new Select().from(TourItem.class)
-//                .where("Id=?", 4)
-//                .execute();
-//        Log.e(TAG, items.size()+"");
-//        Log.e(TAG, items.toString()+"");
-//        items.get(0).getTourInfo().setObserver("申诉铁岭");
-//        items.get(0).getTourInfo().save();
-
-//        ProjectItem prjItem = (ProjectItem) new Select().from(ProjectItem.class)
-//                .where("prjName=?", "工程名").execute().get(0);
-//        List<TourItem> itemList = prjItem.getTourItemList();
-//        Log.e(TAG, itemList.size()+"");
-//        Log.e(TAG, itemList.get(0).getTourNumber()+""
-//                +itemList.get(0).getWeatherState().getWindSpeedItem3());
     }
 
     /**

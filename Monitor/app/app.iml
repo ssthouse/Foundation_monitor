@@ -92,6 +92,8 @@
     <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.1.1" level="project" />
+    <orderEntry type="library" exported="" name="poi-3.8-beta4-20110826" level="project" />
+    <orderEntry type="library" exported="" name="poi-scratchpad-3.8-beta4-20110826" level="project" />
     <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="niftydialogeffects-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="juhe_sdk_v_2_7" level="project" />

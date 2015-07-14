@@ -22,19 +22,29 @@ public class StringUtil {
         return str;
     }
 
+    /**
+     * 根据时间字符串----获取标准时间形式字符串
+     * @param timeInMilesStr
+     * @return
+     */
+    public static String getFormatDate(String timeInMilesStr){
+        Calendar calendar = getCalendarFromTimeInMiles(timeInMilesStr);
+        return getFormatDate(calendar);
+    }
+
 
     /**
      * 根据给定的时间字符串-----获取calendar
      *
-     * @param strTime
+     * @param timeInMilesStr
      * @return
      */
-    public static Calendar getCalendarFromTimeInMiles(String strTime) {
+    public static Calendar getCalendarFromTimeInMiles(String timeInMilesStr) {
         //如果是空字符串的话---直接传回当前的Calendar
-        if (strTime.equals("") || strTime == null) {
+        if (timeInMilesStr.equals("") || timeInMilesStr == null) {
             return Calendar.getInstance();
         }
-        long timeInMiles = Long.parseLong(strTime);
+        long timeInMiles = Long.parseLong(timeInMilesStr);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timeInMiles);
         return calendar;

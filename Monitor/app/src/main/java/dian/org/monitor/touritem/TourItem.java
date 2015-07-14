@@ -77,7 +77,6 @@ public class TourItem extends Model implements Serializable {
     }
 
     /**
-     * TODO
      * 用于测试的构造方法***为了直接获取数据
      */
     public TourItem(String prjName, int tourNumber, boolean isEmpty) {
@@ -96,10 +95,10 @@ public class TourItem extends Model implements Serializable {
             this.tourNumber = tourNumber;
             this.tourInfo = new TourInfo("ssthouse", "1427678030287", "还行");
             this.weatherState = new WeatherState("35", "小雨", "3级", "300mm");
-            this.supportStruct = new SupportStruct("1", "2", "3", "4", "5", "6", "7");
-            this.constructState = new ConstructState("1", "2", "3", "4", "5");
-            this.surroundEnv = new SurroundEnv("1", "2", "3", "4", "5");
-            this.monitorFacility = new MonitorFacility("1", "2", "3");
+            this.supportStruct = new SupportStruct("1shreh", "2erayer", "ayr3", "4aery", "5are", "6y", "7hst");
+            this.constructState = new ConstructState("rth1", "2rt", "rtj3", "rtj4", "5srtjs");
+            this.surroundEnv = new SurroundEnv("rtj1", "rtj2", "3hae", "aerh4", "5rhae");
+            this.monitorFacility = new MonitorFacility("1erh", "2ha", "her3");
         }
     }
 

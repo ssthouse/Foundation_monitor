@@ -4,7 +4,7 @@
     <item android:drawable="@color/transparent"
         android:state_pressed="false" />
 
-    <item android:drawable="@color/trans_gray"
+    <item android:drawable="@color/gray_level0"
         android:state_pressed="true" />
 
 </selector>

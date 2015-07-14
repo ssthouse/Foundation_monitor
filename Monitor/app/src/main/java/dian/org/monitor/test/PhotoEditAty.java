@@ -33,7 +33,7 @@ public class PhotoEditAty extends Activity {
         setContentView(R.layout.test_photo_aty);
 
         //获取数据
-         path = getIntent().getStringExtra("data");
+        path = getIntent().getStringExtra("data");
         bitmap = BitmapFactory.decodeFile(path);
 
         initView();

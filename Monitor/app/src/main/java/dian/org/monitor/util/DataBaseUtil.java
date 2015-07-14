@@ -1,5 +1,7 @@
 package dian.org.monitor.util;
 
+import android.util.Log;
+
 import com.activeandroid.query.Select;
 
 import java.util.List;
@@ -11,6 +13,8 @@ import dian.org.monitor.touritem.TourItem;
  * Created by ssthouse on 2015/7/6.
  */
 public class DataBaseUtil {
+
+    private static final  String TAG = "DataBaseUtil";
 
     /**
      * prjName是否已经存在
@@ -105,10 +109,12 @@ public class DataBaseUtil {
                 .where("prjName=?", prjName)
                 .where("tourNumber=?", tourNumber)
                 .execute();
-        if (itemList.size() == 0 || itemList.size() > 1) {
+        if (itemList.size() == 0) {
+            Log.e(TAG, "数据库中tourItem竟然是空的");
+            Log.e(TAG, itemList.size()+"");
             return null;
         } else {
-            return itemList.get(0);
+            return itemList.get(itemList.size()-1);
         }
     }
 
@@ -128,4 +134,14 @@ public class DataBaseUtil {
         tourItem.save();
     }
 
+
+    public static void deleteTourItemAll(TourItem tourItem){
+        tourItem.getTourInfo().delete();
+        tourItem.getWeatherState().delete();
+        tourItem.getSupportStruct().delete();
+        tourItem.getConstructState().delete();
+        tourItem.getSurroundEnv().delete();
+        tourItem.getMonitorFacility().delete();
+        tourItem.delete();
+    }
 }

@@ -117,6 +117,8 @@
 
         <activity android:name=".test.PhotoEditAty" />
 
+        <!-- 编辑word的activity-->
+
         <!--定位相关-->
         <service
             android:name="com.baidu.location.f"

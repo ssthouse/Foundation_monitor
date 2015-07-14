@@ -28,8 +28,6 @@ public class ProjectItem extends Model implements Serializable{
         this.prjName = prjName;
     }
 
-    //TODO
-
     /**
      * 根据prjName找到对应的TOurItems表中的对应数据
      * 每次调用都是获取的最新的数据

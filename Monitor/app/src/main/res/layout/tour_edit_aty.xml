@@ -6,6 +6,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+
     <!--上面的actionbar-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,349 +57,388 @@
 
     <include layout="@layout/lv_divider" />
 
-    <!--工程名称-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--工程名称-->
+            <LinearLayout
+                android:id="@+id/id_ll_prjName"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/button_click_selector"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:text="工程名称 :"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <TextView
+                    android:id="@+id/id_tv_prjName"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:text="prjName"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+            </LinearLayout>
+
+
+            <include layout="@layout/lv_divider" />
+
+            <!--观测次数-->
+            <LinearLayout
+                android:id="@+id/id_ll_number"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/button_click_selector"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:text="观测次数 :"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <TextView
+                    android:id="@+id/id_tv_number"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:text="第 1 次"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+            </LinearLayout>
+
+
+            <include layout="@layout/lv_divider" />
+
+            <!--观测人-->
+            <LinearLayout
+                android:id="@+id/id_ll_observer"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/button_click_selector"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:text="观测者 :"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <TextView
+                    android:id="@+id/id_tv_observer"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:text="张三"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+            </LinearLayout>
+
+
+            <include layout="@layout/lv_divider" />
+
+            <!--观测日期-->
+            <LinearLayout
+                android:id="@+id/id_ll_date"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/button_click_selector"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:text="观测日期 :"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <TextView
+                    android:id="@+id/id_tv_date"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:text="2000-5-10"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+            </LinearLayout>
+
+
+            <include layout="@layout/lv_divider" />
+
+            <!--自然条件-->
+            <LinearLayout
+                android:id="@+id/id_ll_weather_state"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/button_click_selector"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:text="自然条件 :"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <TextView
+                    android:id="@+id/id_tv_weather_state"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:text="未填写"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <ImageView
+                    android:id="@+id/id_iv_weather_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/tour_iv_more_height"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/more" />
+            </LinearLayout>
+
+
+            <include layout="@layout/lv_divider" />
+
+            <!--支护结构-->
+            <LinearLayout
+                android:id="@+id/id_ll_support_struct"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/button_click_selector"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:text="支护结构 :"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <TextView
+                    android:id="@+id/id_tv_support_struct"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:text="未填写"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <ImageView
+                    android:id="@+id/id_iv_support_struct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/tour_iv_more_height"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/more" />
+            </LinearLayout>
+
+
+            <include layout="@layout/lv_divider" />
+
+            <!--施工工况-->
+            <LinearLayout
+                android:id="@+id/id_ll_construct_state"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/button_click_selector"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:text="施工工况 :"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <TextView
+                    android:id="@+id/id_tv_construct_state"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:text="未填写"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <ImageView
+                    android:id="@+id/id_iv_construct_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/tour_iv_more_height"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/more" />
+            </LinearLayout>
+
+
+            <include layout="@layout/lv_divider" />
+
+            <!--周边情况-->
+            <LinearLayout
+                android:id="@+id/id_ll_surround_env"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/button_click_selector"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:text="周边情况 :"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <TextView
+                    android:id="@+id/id_tv_surround_env"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:text="未填写"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <ImageView
+                    android:id="@+id/id_iv_surround_env"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/tour_iv_more_height"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/more" />
+            </LinearLayout>
+
+
+            <include layout="@layout/lv_divider" />
+
+            <!--监测设施-->
+            <LinearLayout
+                android:id="@+id/id_ll_monitor_facility"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/button_click_selector"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:text="监测设施 :"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <TextView
+                    android:id="@+id/id_tv_monitor_facility"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:text="未填写"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <ImageView
+                    android:id="@+id/id_iv_monitor_facility"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/tour_iv_more_height"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/more" />
+            </LinearLayout>
+
+
+            <include layout="@layout/lv_divider" />
+
+
+            <!--gps-->
+            <LinearLayout
+                android:id="@+id/id_ll_gps"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/button_click_selector"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:text="巡视轨迹 :"
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <TextView
+                    android:id="@+id/id_tv_gps_state"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:text=""
+                    android:textSize="@dimen/tour_edit_text_size_normal" />
+
+                <ImageView
+                    android:id="@+id/id_iv_gps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/tour_iv_more_height"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/more" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
     <LinearLayout
-        android:id="@+id/id_ll_prjName"
+        android:id="@+id/id_ll_share"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="@drawable/blue_button_click"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:text="工程名称 :"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <TextView
-            android:id="@+id/id_tv_prjName"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="prjName"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-    </LinearLayout>
-
-
-    <include layout="@layout/lv_divider" />
-
-    <!--观测次数-->
-    <LinearLayout
-        android:id="@+id/id_ll_number"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:text="观测次数 :"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <TextView
-            android:id="@+id/id_tv_number"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="第 1 次"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-    </LinearLayout>
-
-
-    <include layout="@layout/lv_divider" />
-
-    <!--观测人-->
-    <LinearLayout
-        android:id="@+id/id_ll_observer"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:text="观测者 :"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <TextView
-            android:id="@+id/id_tv_observer"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="张三"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-    </LinearLayout>
-
-
-    <include layout="@layout/lv_divider" />
-
-    <!--观测日期-->
-    <LinearLayout
-        android:id="@+id/id_ll_date"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:text="观测日期 :"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <TextView
-            android:id="@+id/id_tv_date"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="2000-5-10"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-    </LinearLayout>
-
-
-    <include layout="@layout/lv_divider" />
-
-    <!--自然条件-->
-    <LinearLayout
-        android:id="@+id/id_ll_weather_state"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:text="自然条件 :"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <TextView
-            android:id="@+id/id_tv_weather_state"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="未填写"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <ImageView
-            android:id="@+id/id_iv_weather_state"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/tour_iv_more_height"
             android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/more" />
-    </LinearLayout>
-
-
-    <include layout="@layout/lv_divider" />
-
-    <!--支护结构-->
-    <LinearLayout
-        android:id="@+id/id_ll_support_struct"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:text="支护结构 :"
+            android:gravity="center"
+            android:text="分享"
+            android:textColor="@color/white"
             android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <TextView
-            android:id="@+id/id_tv_support_struct"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="未填写"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <ImageView
-            android:id="@+id/id_iv_support_struct"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/tour_iv_more_height"
-            android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/more" />
-    </LinearLayout>
-
-
-    <include layout="@layout/lv_divider" />
-
-    <!--施工工况-->
-    <LinearLayout
-        android:id="@+id/id_ll_construct_state"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:text="施工工况 :"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <TextView
-            android:id="@+id/id_tv_construct_state"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="未填写"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <ImageView
-            android:id="@+id/id_iv_construct_state"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/tour_iv_more_height"
-            android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/more" />
-    </LinearLayout>
-
-
-    <include layout="@layout/lv_divider" />
-
-    <!--周边情况-->
-    <LinearLayout
-        android:id="@+id/id_ll_surround_env"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:text="周边情况 :"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <TextView
-            android:id="@+id/id_tv_surround_env"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="未填写"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <ImageView
-            android:id="@+id/id_iv_surround_env"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/tour_iv_more_height"
-            android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/more" />
-    </LinearLayout>
-
-
-    <include layout="@layout/lv_divider" />
-
-    <!--监测设施-->
-    <LinearLayout
-        android:id="@+id/id_ll_monitor_facility"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:text="监测设施 :"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <TextView
-            android:id="@+id/id_tv_monitor_facility"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="未填写"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <ImageView
-            android:id="@+id/id_iv_monitor_facility"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/tour_iv_more_height"
-            android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/more" />
-    </LinearLayout>
-
-
-    <include layout="@layout/lv_divider" />
-
-
-    <!--gps-->
-    <LinearLayout
-        android:id="@+id/id_ll_gps"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:text="巡视轨迹 :"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <TextView
-            android:id="@+id/id_tv_gps_state"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical|right"
-            android:text="未记录"
-            android:textSize="@dimen/tour_edit_text_size_normal" />
-
-        <ImageView
-            android:id="@+id/id_iv_gps"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/tour_iv_more_height"
-            android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/more" />
     </LinearLayout>
 </LinearLayout>
