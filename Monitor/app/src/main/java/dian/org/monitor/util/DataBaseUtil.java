@@ -14,7 +14,7 @@ import dian.org.monitor.touritem.TourItem;
  */
 public class DataBaseUtil {
 
-    private static final  String TAG = "DataBaseUtil";
+    private static final String TAG = "DataBaseUtil";
 
     /**
      * prjName是否已经存在
@@ -88,8 +88,8 @@ public class DataBaseUtil {
             return true;
         }
         //只要有一个相同的---就不行
-        for(TourItem item : itemList){
-            if(item.getTourNumber() == tourNumber){
+        for (TourItem item : itemList) {
+            if (item.getTourNumber() == tourNumber) {
                 return false;
             }
         }
@@ -105,19 +105,17 @@ public class DataBaseUtil {
     public static TourItem getTourItemInDB(TourItem tourItem) {
         String prjName = tourItem.getPrjName();
         int tourNumber = tourItem.getTourNumber();
-        List<TourItem> itemList = new Select().from(TourItem.class)
-                .where("prjName=?", prjName)
-                .where("tourNumber=?", tourNumber)
+        Log.e(TAG, prjName + ":::::" + tourNumber);
+        List<TourItem> list = new Select().from(TourItem.class)
+                .where("prjName=?", tourItem.getPrjName())
                 .execute();
-        if (itemList.size() == 0) {
-            Log.e(TAG, "数据库中tourItem竟然是空的");
-            Log.e(TAG, itemList.size()+"");
-            return null;
-        } else {
-            return itemList.get(itemList.size()-1);
+        for (TourItem item : list) {
+            if (item.getTourNumber() == tourItem.getTourNumber()) {
+                return item;
+            }
         }
+        return null;
     }
-
 
     /**
      * 将TOurItem的数据全部保存下来
@@ -134,8 +132,7 @@ public class DataBaseUtil {
         tourItem.save();
     }
 
-
-    public static void deleteTourItemAll(TourItem tourItem){
+    public static void deleteTourItemAll(TourItem tourItem) {
         tourItem.getTourInfo().delete();
         tourItem.getWeatherState().delete();
         tourItem.getSupportStruct().delete();

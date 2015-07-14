@@ -31,7 +31,7 @@ import dian.org.monitor.util.DataBaseUtil;
 import dian.org.monitor.util.PictureManager;
 import dian.org.monitor.util.StringUtil;
 import dian.org.monitor.util.ToastUtil;
-import dian.org.monitor.util.WordGenereteUtil;
+import dian.org.monitor.util.WordUtil;
 
 /**
  * Created by ssthouse on 2015/6/10.
@@ -282,8 +282,9 @@ public class TourEditAty extends Activity {
         llShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WordGenereteUtil.generateWordFile(TourEditAty.this, tourItem);
+                WordUtil.generateWordFile(TourEditAty.this, tourItem);
                 //TODO ----分享
+                WordUtil.sendWordFile(TourEditAty.this, tourItem);
             }
         });
     }

@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         //TODO---测试
-//        WordGenereteUtil.generateWordFile(this, new TourItem("纳入高考比我家来人啊人", 6, false));
+//        WordUtil.generateWordFile(this, new TourItem("纳入高考比我家来人啊人", 6, false));
 
         setContentView(R.layout.main_aty);
         //透明顶栏
